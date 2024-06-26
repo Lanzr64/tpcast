@@ -5,12 +5,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.text.CollationElementIterator;
 
 public class tpCastTag {
     private CompoundTag mTag;
     private ServerPlayer mPlayer;
+    final public int CoolDownPiece = 3000; // 10 = 1s
+    final public int MaxLevel = 5;
+    final public long MaxCoolDown = MaxLevel *CoolDownPiece;
+
     public String
             HomePosAlias ="homePos",
             HomeDimAlias ="homeDim",
@@ -24,6 +29,16 @@ public class tpCastTag {
         if(!pTag.contains(tpCast.MODID)) {
             pTag.put(tpCast.MODID,mTag);
         }
+        // 不存在冷却时间 init
+        if(!mTag.contains(CoolDownStampAlias)) {
+            mTag.putLong(CoolDownStampAlias,player.getLevel().getGameTime());
+        }
+
+    }
+    public void castOverload(float level) {
+        long st = mTag.getLong(CoolDownStampAlias);
+        st += CoolDownPiece * level;
+        mTag.putLong(CoolDownStampAlias,st);
     }
 
     public boolean hasKey(String str){
@@ -39,6 +54,12 @@ public class tpCastTag {
     }
     public long getCoolDownStamp() {
         return mTag.getLong(CoolDownStampAlias);
+    }
+    public int getCoolDownLevel(long gt) {
+        long gap = mTag.getLong(CoolDownStampAlias) - gt;
+        int lv = (int)(gap / CoolDownPiece);
+        lv = Math.max(lv,0);
+        return lv;
     }
     // -----------home / back
     public void setHome() {
