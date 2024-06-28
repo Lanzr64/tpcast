@@ -7,12 +7,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.awt.desktop.PrintFilesEvent;
 import java.text.CollationElementIterator;
 
 public class tpCastTag {
     private CompoundTag mTag;
     private ServerPlayer mPlayer;
-    final public int CoolDownPiece = 3000; // 10 = 1s
+    final public int CoolDownPiece = 6000; // 10 = 1s
     final public int MaxLevel = 5;
     final public long MaxCoolDown = MaxLevel *CoolDownPiece;
 
@@ -35,10 +36,17 @@ public class tpCastTag {
         }
 
     }
-    public void castOverload(float level) {
+    public boolean castOverload(float level) {
+        boolean ret = true;
         long st = mTag.getLong(CoolDownStampAlias);
-        st += CoolDownPiece * level;
-        mTag.putLong(CoolDownStampAlias,st);
+        long gt = mPlayer.getLevel().getGameTime();
+        int overLoad = (int)(CoolDownPiece* level);
+        if(st - gt > MaxCoolDown-overLoad) {
+            overLoad += (int)(CoolDownPiece * level);
+            ret = false;
+        }
+        setCoolDownStamp(st+overLoad);
+        return ret;
     }
 
     public boolean hasKey(String str){
@@ -59,6 +67,9 @@ public class tpCastTag {
         long gap = mTag.getLong(CoolDownStampAlias) - gt;
         int lv = (int)(gap / CoolDownPiece);
         lv = Math.max(lv,0);
+        if(gap < 0 ) {
+            setCoolDownStamp(gt);
+        }
         return lv;
     }
     // -----------home / back

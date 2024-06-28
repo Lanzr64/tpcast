@@ -47,7 +47,7 @@ public class tpCastStr {
             for (int i = 0 ;i < tag.MaxLevel;i++){
                 str.append("/");
             }
-            str.append("]XXX\n已熔断 无法施术");
+            str.append("]XXX 已熔断 无法施术");
         } else {
             ret = true;
             str.append("-[");
