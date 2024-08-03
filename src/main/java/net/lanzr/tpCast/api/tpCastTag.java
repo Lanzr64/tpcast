@@ -13,8 +13,8 @@ import java.text.CollationElementIterator;
 public class tpCastTag {
     private CompoundTag mTag;
     private ServerPlayer mPlayer;
-    final public int CoolDownPiece = 6000; // 10 = 1s
-    final public int MaxLevel = 5;
+    final public int CoolDownPiece = 4800; // 10 = 1s
+    final public int MaxLevel = 3;
     final public long MaxCoolDown = MaxLevel *CoolDownPiece;
 
     public String
@@ -32,14 +32,14 @@ public class tpCastTag {
         }
         // 不存在冷却时间 init
         if(!mTag.contains(CoolDownStampAlias)) {
-            mTag.putLong(CoolDownStampAlias,player.getLevel().getGameTime());
+            mTag.putLong(CoolDownStampAlias,player.level().getGameTime());
         }
 
     }
     public boolean castOverload(float level) {
         boolean ret = true;
         long st = mTag.getLong(CoolDownStampAlias);
-        long gt = mPlayer.getLevel().getGameTime();
+        long gt = mPlayer.level().getGameTime();
         int overLoad = (int)(CoolDownPiece* level);
         if(st - gt > MaxCoolDown-overLoad) {
             overLoad += (int)(CoolDownPiece * level);
@@ -76,7 +76,7 @@ public class tpCastTag {
     public void setHome() {
         BlockPos playerPos = mPlayer.getOnPos();
         mTag.putIntArray(HomePosAlias,new int[]{playerPos.getX(), playerPos.getY(), playerPos.getZ()});
-        mTag.putString(HomeDimAlias,mPlayer.getLevel().dimension().location().toString());
+        mTag.putString(HomeDimAlias,mPlayer.level().dimension().location().toString());
     }
     public void setHome(Vec3 pos, String dim) {
         mTag.putIntArray(HomePosAlias,new int[]{(int)pos.x,(int)pos.y,(int)pos.z});
@@ -92,7 +92,7 @@ public class tpCastTag {
     public void setBack() {
         BlockPos playerPos = mPlayer.getOnPos();
         mTag.putIntArray(BackPosAlias,new int[]{playerPos.getX(), playerPos.getY(), playerPos.getZ()});
-        mTag.putString(BackDimAlias,mPlayer.getLevel().dimension().location().toString());
+        mTag.putString(BackDimAlias,mPlayer.level().dimension().location().toString());
     }
 
     public void setBack(Vec3 pos, String dim) {

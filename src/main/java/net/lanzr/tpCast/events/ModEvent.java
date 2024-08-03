@@ -6,6 +6,7 @@ import net.lanzr.tpCast.api.tpCastTag;
 import net.lanzr.tpCast.tpCast;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -23,6 +24,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.tuple.Pair;
 
+import javax.swing.plaf.DimensionUIResource;
 import javax.swing.tree.ExpandVetoException;
 
 @Mod.EventBusSubscriber(modid = tpCast.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -63,7 +65,7 @@ public class ModEvent {
 //                pos[1] = playerPos.getY();
 //                pos[2] = playerPos.getZ();
 //                player.getPersistentData().putIntArray(tpCast.MODID + "homepos", pos);
-//                player.getPersistentData().putString(tpCast.MODID + "homedim", player.getLevel().dimension().location().toString());
+//                player.getPersistentData().putString(tpCast.MODID + "homedim", player.level().dimension().location().toString());
             }
         }
         @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -97,8 +99,8 @@ public class ModEvent {
 //            event.getDispatcher().register(
 //                    Commands.literal("wTst").executes(ctx -> {
 //                        ServerPlayer player = ctx.getSource().getPlayerOrException();
-////                        Level lvl = ctx.getSource().getLevel();
-//                        long gt = ctx.getSource().getLevel().getGameTime();
+////                        Level lvl = ctx.getSource().level();
+//                        long gt = ctx.getSource().level().getGameTime();
 //                        tpCastTag tag = new tpCastTag(player);
 //                        player.sendSystemMessage(Component.literal("time "+gt),true);
 //                        tag.setCoolDownStamp(gt);
@@ -108,7 +110,7 @@ public class ModEvent {
 //            event.getDispatcher().register(
 //                    Commands.literal("tst").executes(ctx -> {
 //                        ServerPlayer player = ctx.getSource().getPlayerOrException();
-//                        long gt = ctx.getSource().getLevel().getGameTime();
+//                        long gt = ctx.getSource().level().getGameTime();
 //                        tpCastTag tag = new tpCastTag(player);
 //                        tag.setCoolDownStamp(gt);
 //                        return 0;
@@ -135,7 +137,7 @@ public class ModEvent {
                         ServerPlayer player = ctx.getSource().getPlayerOrException();
                         tpCastTag tag = new tpCastTag(player);
                         tpCastStr str = new tpCastStr(player);
-                        boolean castAble = (tag.getCoolDownLevel(player.getLevel().getGameTime()) <= tag.MaxLevel);
+                        boolean castAble = (tag.getCoolDownLevel(player.level().getGameTime()) <= tag.MaxLevel);
                         if(!castAble) {
                             str.sendCoolDownInfoMsg();
                             return -1;
@@ -144,7 +146,8 @@ public class ModEvent {
                             tag.castOverload(1);
                             Pair<Vec3,String> home = tag.getHome();
                             ResourceLocation rl = new ResourceLocation(home.getRight());
-                            ResourceKey<Level> mydim = ResourceKey.create(Registry.DIMENSION_REGISTRY,rl);
+
+                            ResourceKey<Level> mydim = ResourceKey.create(Registries.DIMENSION, rl);
                             player.teleportTo(player.getServer().getLevel(mydim), home.getLeft().x,home.getLeft().y+1,home.getLeft().z,player.getYRot(),player.getXRot());
                             str.sendCoolDownInfoMsg();
                             return 1;
@@ -159,7 +162,7 @@ public class ModEvent {
                         ServerPlayer player = ctx.getSource().getPlayerOrException();
                         tpCastTag tag = new tpCastTag(player);
                         tpCastStr str = new tpCastStr(player);
-                        boolean castAble = (tag.getCoolDownLevel(player.getLevel().getGameTime()) <= tag.MaxLevel);
+                        boolean castAble = (tag.getCoolDownLevel(player.level().getGameTime()) <= tag.MaxLevel);
                         if(!castAble) {
                             str.sendCoolDownInfoMsg();
                             return -1;
@@ -168,7 +171,7 @@ public class ModEvent {
                             tag.castOverload(0.5f);
                             Pair<Vec3,String> home = tag.getBack();
                             ResourceLocation rl = new ResourceLocation(home.getRight());
-                            ResourceKey<Level> mydim = ResourceKey.create(Registry.DIMENSION_REGISTRY,rl);
+                            ResourceKey<Level> mydim = ResourceKey.create(Registries.DIMENSION,rl);
                             player.teleportTo(player.getServer().getLevel(mydim), home.getLeft().x,home.getLeft().y+1,home.getLeft().z,player.getYRot(),player.getXRot());
                             tag.rmKey(tag.BackPosAlias);
                             str.sendCoolDownInfoMsg();
