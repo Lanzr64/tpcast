@@ -4,11 +4,18 @@ import net.lanzr.tpCast.api.TpCastMethod;
 import net.lanzr.tpCast.api.tpCastStr;
 import net.lanzr.tpCast.api.tpCastTag;
 import net.lanzr.tpCast.tpCast;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.coordinates.Coordinates;
+import net.minecraft.commands.arguments.coordinates.Vec3Argument;
+import net.minecraft.commands.arguments.coordinates.WorldCoordinates;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.commands.TeleportCommand;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
@@ -24,6 +31,7 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.swing.tree.ExpandVetoException;
+import java.util.Collections;
 
 @Mod.EventBusSubscriber(modid = tpCast.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModEvent {
@@ -84,6 +92,27 @@ public class ModEvent {
         }
         @SubscribeEvent
         public static void CommandRegistration(RegisterCommandsEvent event) {
+
+            event.getDispatcher().register(
+                    Commands.literal("overload-tp")
+                        .then(Commands.argument("location", Vec3Argument.vec3())
+                        .executes(ctx -> {
+                            Vec3 pos = Vec3Argument.getVec3(ctx,"location");
+                            ServerPlayer player = ctx.getSource().getPlayerOrException();
+                            tpCastTag tag = new tpCastTag(player);
+                            tpCastStr str = new tpCastStr(player);
+                            boolean castAble = (tag.getCoolDownLevel(player.getLevel().getGameTime()) <= tag.MaxLevel);
+                            if(!castAble) {
+                                str.sendCoolDownInfoMsg();
+                                return -1;
+                            }
+                            player.teleportTo(pos.x,pos.y,pos.z);
+                            tag.castOverload(7);
+                            str.sendCoolDownInfoMsg();
+                            return  1;
+                        })
+                    )
+            );
             event.getDispatcher().register(
                     Commands.literal("cast-off").executes(ctx -> {
                         ServerPlayer player = ctx.getSource().getPlayerOrException();
@@ -105,15 +134,17 @@ public class ModEvent {
 //                        return 0;
 //                    })
 //            );
-//            event.getDispatcher().register(
-//                    Commands.literal("tst").executes(ctx -> {
-//                        ServerPlayer player = ctx.getSource().getPlayerOrException();
-//                        long gt = ctx.getSource().getLevel().getGameTime();
-//                        tpCastTag tag = new tpCastTag(player);
-//                        tag.setCoolDownStamp(gt);
-//                        return 0;
-//                    })
-//            );
+            event.getDispatcher().register(
+                    Commands.literal("resetCoolDown").executes(ctx -> {
+                        ServerPlayer player = ctx.getSource().getPlayerOrException();
+                        long gt = ctx.getSource().getLevel().getGameTime();
+                        tpCastTag tag = new tpCastTag(player);
+                        tag.setCoolDownStamp(gt);
+                        return 0;
+                    })
+                    .requires(ctx-> {return ctx.hasPermission(4);
+                    })
+            );
 //            event.getDispatcher().register(
 //                    Commands.literal("rTst").executes(ctx -> {
 //                        ServerPlayer player = ctx.getSource().getPlayerOrException();

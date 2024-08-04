@@ -13,7 +13,7 @@ import java.text.CollationElementIterator;
 public class tpCastTag {
     private CompoundTag mTag;
     private ServerPlayer mPlayer;
-    final public int CoolDownPiece = 6000; // 10 = 1s
+    final public int CoolDownPiece = 9000; // 10 = 1s
     final public int MaxLevel = 5;
     final public long MaxCoolDown = MaxLevel *CoolDownPiece;
 
@@ -42,7 +42,7 @@ public class tpCastTag {
         long gt = mPlayer.getLevel().getGameTime();
         int overLoad = (int)(CoolDownPiece* level);
         if(st - gt > MaxCoolDown-overLoad) {
-            overLoad += (int)(CoolDownPiece * level);
+            overLoad += (int)(CoolDownPiece * 2);
             ret = false;
         }
         setCoolDownStamp(st+overLoad);
