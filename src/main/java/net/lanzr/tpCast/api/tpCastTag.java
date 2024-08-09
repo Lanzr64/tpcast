@@ -42,7 +42,7 @@ public class tpCastTag {
         long gt = mPlayer.level().getGameTime();
         int overLoad = (int)(CoolDownPiece* level);
         if(st - gt > MaxCoolDown-overLoad) {
-            overLoad += (int)(CoolDownPiece * level);
+            overLoad += (int)(CoolDownPiece * 2);
             ret = false;
         }
         setCoolDownStamp(st+overLoad);

@@ -55,7 +55,7 @@ public class tpCastStr {
                 if(i < gLv) {
                     str.append("/");
                 } else {
-                    str.append(" ");
+                    str.append("#");
                 }
             }
             str.append("]-过载等级: "+gLv);
