@@ -141,9 +141,9 @@ public class ModEvent {
                  Commands.literal("tpy")
                      .executes(ctx -> {
                          ServerPlayer player = ctx.getSource().getPlayerOrException();
-
                          if (tpRequests.pending(player.getUUID())) {
-                             List<ServerPlayer> playerlist = ctx.getSource().getLevel().getPlayers(players -> true);
+                              List<ServerPlayer> playerlist = ctx.getSource().getServer().getPlayerList().getPlayers();
+//                             List<ServerPlayer> playerlist = ctx.getSource().getLevel().getPlayers(players -> true);
                              Boolean playerFound = false;
                              for (int i = 0; i < playerlist.size(); ++ i) {
                                  if (playerlist.get(i).getUUID().equals(tpRequests.fromWho((player.getUUID())))) {
