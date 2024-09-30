@@ -4,6 +4,7 @@ import net.lanzr.tpCast.api.TpCastMethod;
 import net.lanzr.tpCast.api.tpCastStr;
 import net.lanzr.tpCast.api.tpCastTag;
 import net.lanzr.tpCast.api.tpTools.tpRequests;
+import net.lanzr.tpCast.config.Config;
 import net.lanzr.tpCast.tpCast;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -44,7 +45,10 @@ import java.util.List;
 
 @Mod.EventBusSubscriber(modid = tpCast.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModEvent {
-
+    public static float levelCostBack = (float)Config.levelCostBack;
+    public static float levelCostHome = (float)Config.levelCostHome;
+    public static float levelCostTPA = (float)Config.levelCostTPA;
+    public static float levelCostSPAWN = (float)Config.levelCostSPAWN;
     @Mod.EventBusSubscriber(modid = tpCast.MODID)
     public static class RegisterCommands {
         static public void printSTr(String str) {
@@ -168,7 +172,7 @@ public class ModEvent {
                                      teleporter.teleportTo( target.serverLevel(),
                                              tPos.getX(),tPos.getY()+1,tPos.getZ(),
                                              teleporter.getYRot(),teleporter.getXRot());
-                                     tag.castOverload(1.5f);
+                                     tag.castOverload(levelCostTPA);
                                      str.sendCoolDownInfoMsg();
                                  }
                              }
@@ -264,6 +268,7 @@ public class ModEvent {
                     Commands.literal("sethome").executes(ctx -> {
                         ServerPlayer player = ctx.getSource().getPlayerOrException();
                         tpCastTag tag = new tpCastTag(player);
+                        player.sendSystemMessage(Component.literal("home核心 已就绪"), false);
                         tag.setHome();
                         return 1;
                     })
@@ -279,7 +284,7 @@ public class ModEvent {
                             return -1;
                         }
                         if (tag.hasKey(tag.HomePosAlias)) {
-                            tag.castOverload(1);
+                            tag.castOverload(levelCostHome);
                             Pair<Vec3,String> home = tag.getHome();
                             ResourceLocation rl = new ResourceLocation(home.getRight());
 
@@ -311,7 +316,7 @@ public class ModEvent {
                         int y = sl.getSharedSpawnPos().getY();
                         int z = sl.getSharedSpawnPos().getZ();
 
-                        tag.castOverload(1);
+                        tag.castOverload(levelCostSPAWN);
                         player.teleportTo( sl,
                                 x,y,z,
                                 player.getYRot(),player.getXRot());
@@ -330,7 +335,7 @@ public class ModEvent {
                             return -1;
                         }
                         if (tag.hasKey(tag.BackPosAlias)) {
-                            tag.castOverload(0.5f);
+                            tag.castOverload(levelCostBack);
                             Pair<Vec3,String> home = tag.getBack();
                             ResourceLocation rl = new ResourceLocation(home.getRight());
                             ResourceKey<Level> mydim = ResourceKey.create(Registries.DIMENSION,rl);

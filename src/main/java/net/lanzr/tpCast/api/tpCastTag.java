@@ -1,5 +1,6 @@
 package net.lanzr.tpCast.api;
 
+import net.lanzr.tpCast.config.Config;
 import net.lanzr.tpCast.tpCast;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -14,9 +15,9 @@ public class tpCastTag {
     private CompoundTag mTag;
     private ServerPlayer mPlayer;
     final public int CoolDownPiece = 4800; // 10 = 1s
-    final public int MaxLevel = 3;
+    final public int MaxLevel = Config.maxLevel;
     final public long MaxCoolDown = MaxLevel *CoolDownPiece;
-
+    final private double punishLevel = Config.levelPunishFuseBlow;
     public String
             HomePosAlias ="homePos",
             HomeDimAlias ="homeDim",
@@ -42,7 +43,7 @@ public class tpCastTag {
         long gt = mPlayer.level().getGameTime();
         int overLoad = (int)(CoolDownPiece* level);
         if(st - gt > MaxCoolDown-overLoad) {
-            overLoad += (int)(CoolDownPiece * 2);
+            overLoad += (int)(CoolDownPiece * punishLevel);
             ret = false;
         }
         setCoolDownStamp(st+overLoad);
