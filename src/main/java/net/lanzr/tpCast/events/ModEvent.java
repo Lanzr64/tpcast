@@ -161,7 +161,7 @@ public class ModEvent {
                                      tpCastTag tag = new tpCastTag(teleporter);
                                      tpCastStr str = new tpCastStr(teleporter);
 
-                                     boolean castAble = (tag.getCoolDownLevel(teleporter.level().getGameTime()) <= tag.MaxLevel);
+                                     boolean castAble = (tag.getCoolDownLevel(teleporter.getLevel().getGameTime()) <= tag.MaxLevel);
                                      if(!castAble) {
                                          teleporter.sendSystemMessage(Component.literal("已经过载，无法传送"), false);
                                          str.sendCoolDownInfoMsg();
@@ -169,7 +169,7 @@ public class ModEvent {
                                      }
 
                                      // 在这里进行判定检测是否可以传送
-                                     teleporter.teleportTo( target.level(),
+                                     teleporter.teleportTo( target.getLevel(),
                                              tPos.getX(),tPos.getY()+1,tPos.getZ(),
                                              teleporter.getYRot(),teleporter.getXRot());
                                      tag.castOverload(levelCostTPA);
@@ -278,7 +278,7 @@ public class ModEvent {
                         ServerPlayer player = ctx.getSource().getPlayerOrException();
                         tpCastTag tag = new tpCastTag(player);
                         tpCastStr str = new tpCastStr(player);
-                        boolean castAble = (tag.getCoolDownLevel(player.level().getGameTime()) <= tag.MaxLevel);
+                        boolean castAble = (tag.getCoolDownLevel(player.getLevel().getGameTime()) <= tag.MaxLevel);
                         if(!castAble) {
                             str.sendCoolDownInfoMsg();
                             return -1;
@@ -288,8 +288,10 @@ public class ModEvent {
                             Pair<Vec3,String> home = tag.getHome();
                             ResourceLocation rl = new ResourceLocation(home.getRight());
 
-                            ResourceKey<Level> mydim = ResourceKey.create(Registry..DIMENSION, rl);
+
+                            ResourceKey<Level> mydim = ResourceKey.create(Registry.DIMENSION_REGISTRY,rl);
                             player.teleportTo(player.getServer().getLevel(mydim), home.getLeft().x,home.getLeft().y+1,home.getLeft().z,player.getYRot(),player.getXRot());
+
                             str.sendCoolDownInfoMsg();
                             return 1;
                         } else {
@@ -303,7 +305,7 @@ public class ModEvent {
                         ServerPlayer player = ctx.getSource().getPlayerOrException();
                         tpCastTag tag = new tpCastTag(player);
                         tpCastStr str = new tpCastStr(player);
-                        boolean castAble = (tag.getCoolDownLevel(player.level().getGameTime()) <= tag.MaxLevel);
+                        boolean castAble = (tag.getCoolDownLevel(player.getLevel().getGameTime()) <= tag.MaxLevel);
                         if(!castAble) {
                             str.sendCoolDownInfoMsg();
                             return -1;
@@ -329,7 +331,7 @@ public class ModEvent {
                         ServerPlayer player = ctx.getSource().getPlayerOrException();
                         tpCastTag tag = new tpCastTag(player);
                         tpCastStr str = new tpCastStr(player);
-                        boolean castAble = (tag.getCoolDownLevel(player.level().getGameTime()) <= tag.MaxLevel);
+                        boolean castAble = (tag.getCoolDownLevel(player.getLevel().getGameTime()) <= tag.MaxLevel);
                         if(!castAble) {
                             str.sendCoolDownInfoMsg();
                             return -1;
@@ -338,7 +340,7 @@ public class ModEvent {
                             tag.castOverload(levelCostBack);
                             Pair<Vec3,String> home = tag.getBack();
                             ResourceLocation rl = new ResourceLocation(home.getRight());
-                            ResourceKey<Level> mydim = ResourceKey.create(Registries.DIMENSION,rl);
+                            ResourceKey<Level> mydim = ResourceKey.create(Registry.DIMENSION_REGISTRY,rl);
                             player.teleportTo(player.getServer().getLevel(mydim), home.getLeft().x,home.getLeft().y+1,home.getLeft().z,player.getYRot(),player.getXRot());
                             tag.rmKey(tag.BackPosAlias);
                             str.sendCoolDownInfoMsg();

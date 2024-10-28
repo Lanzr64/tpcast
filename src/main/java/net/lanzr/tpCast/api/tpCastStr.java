@@ -10,7 +10,7 @@ public class tpCastStr {
     }
     private String genCoolDownStr() {
         boolean circusBreak = false;
-        long gt = mPlayer.level().getGameTime();
+        long gt = mPlayer.getLevel().getGameTime();
         tpCastTag tag = new tpCastTag(mPlayer);
         StringBuffer str = new StringBuffer();
         int gLv = tag.getCoolDownLevel(gt);
@@ -38,7 +38,7 @@ public class tpCastStr {
     }
     public boolean sendCoolDownInfoMsg(){
         boolean ret = false;
-        long gt = mPlayer.level().getGameTime();
+        long gt = mPlayer.getLevel().getGameTime();
         tpCastTag tag = new tpCastTag(mPlayer);
         StringBuffer str = new StringBuffer();
         int gLv = tag.getCoolDownLevel(gt);

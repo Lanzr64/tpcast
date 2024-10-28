@@ -28,8 +28,7 @@ public class Config
     private static final ForgeConfigSpec.DoubleValue LEVEL_COST_BACK = BUILDER
             .comment("back cost level")
             .defineInRange("cost", 0.5f, 0.f, 100.f);
-    private static final ForgeConfigSpec.DoubleValue LEVEL_COST_HOME = BUILDER
-            .comment("home cost level")
+    private static final ForgeConfigSpec.DoubleValue LEVEL_COST_HOME = BUILDER.comment("home cost level")
             .defineInRange("cost", 1.f, 0.f, 100.f);
     private static final ForgeConfigSpec.DoubleValue LEVEL_COST_TPA = BUILDER
             .comment("tpa cost level")

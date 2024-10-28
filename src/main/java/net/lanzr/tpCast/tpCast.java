@@ -41,7 +41,7 @@ public class tpCast
                 new IExtensionPoint.DisplayTest(() ->
                         NetworkConstants.IGNORESERVERONLY, (a, b) -> true));
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SPEC,"tpcast-server.toml");
 //        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 //
 //        // Register the commonSetup method for modloading
