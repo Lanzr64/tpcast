@@ -19,28 +19,22 @@ import java.util.stream.Collectors;
 @Mod.EventBusSubscriber(modid = tpCast.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config
 {
-    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+//    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+    public static final ForgeConfigSpec SPEC;
+    static {
+        ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+        setup(BUILDER);
+        SPEC = BUILDER.build();
+    }
 
-    private static final ForgeConfigSpec.IntValue MAX_LEVEL = BUILDER
-            .comment("the max overload level")
-            .defineInRange("max level", 3, 0, Integer.MAX_VALUE);
+    private static ForgeConfigSpec.IntValue MAX_LEVEL;
 
-    private static final ForgeConfigSpec.DoubleValue LEVEL_COST_BACK = BUILDER
-            .comment("back cost level")
-            .defineInRange("cost", 0.5f, 0.f, 100.f);
-    private static final ForgeConfigSpec.DoubleValue LEVEL_COST_HOME = BUILDER.comment("home cost level")
-            .defineInRange("cost", 1.f, 0.f, 100.f);
-    private static final ForgeConfigSpec.DoubleValue LEVEL_COST_TPA = BUILDER
-            .comment("tpa cost level")
-            .defineInRange("cost", 1.5f, 0.f, 100.f);
-    private static final ForgeConfigSpec.DoubleValue LEVEL_COST_SPAWN = BUILDER
-            .comment("spawn cost level")
-            .defineInRange("cost", 1.f, 0.f, 100.f);
-    private static final ForgeConfigSpec.DoubleValue LEVEL_PUNISH_FUSE_BLOW = BUILDER
-            .comment("Punishment level after fuse blow")
-            .defineInRange("punishment", 2.f, 0.f, 100.f);
+    private static ForgeConfigSpec.DoubleValue LEVEL_COST_BACK;
+    private static ForgeConfigSpec.DoubleValue LEVEL_COST_HOME;
+    private static ForgeConfigSpec.DoubleValue LEVEL_COST_TPA;
+    private static ForgeConfigSpec.DoubleValue LEVEL_COST_SPAWN;
+    private static ForgeConfigSpec.DoubleValue LEVEL_PUNISH_FUSE_BLOW;
 
-    public static final ForgeConfigSpec SPEC = BUILDER.build();
 
     public static boolean logDirtBlock;
     public static int maxLevel;
@@ -56,6 +50,29 @@ public class Config
     private static boolean validateItemName(final Object obj)
     {
         return obj instanceof final String itemName && ForgeRegistries.ITEMS.containsKey(new ResourceLocation(itemName));
+    }
+
+    private static void setup(ForgeConfigSpec.Builder builder) {
+        builder.push("tpcast setup");
+        MAX_LEVEL = builder
+                .comment("the max overload level")
+                .defineInRange("max level", 3, 0, Integer.MAX_VALUE);
+        LEVEL_COST_BACK = builder
+                .comment("back cost level")
+                .defineInRange("back cost", 0.5f, 0.f, 100.f);
+        LEVEL_COST_HOME = builder
+                .comment("home cost level")
+                .defineInRange("home cost", 1.f, 0.f, 100.f);
+        LEVEL_COST_TPA = builder
+                .comment("tpa cost level")
+                .defineInRange("tpa cost", 1.5f, 0.f, 100.f);
+        LEVEL_COST_SPAWN = builder
+                .comment("spawn cost level")
+                .defineInRange("spawn cost", 1.f, 0.f, 100.f);
+        LEVEL_PUNISH_FUSE_BLOW = builder
+                .comment("Punishment level after fuse blow")
+                .defineInRange("punishment", 2.f, 0.f, 100.f);
+        builder.pop();
     }
 
     @SubscribeEvent

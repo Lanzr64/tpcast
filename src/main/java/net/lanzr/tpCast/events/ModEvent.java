@@ -17,6 +17,7 @@ import net.minecraft.commands.arguments.coordinates.WorldCoordinates;
 import net.minecraft.core.BlockPos;
 //import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceKey;
@@ -45,10 +46,11 @@ import java.util.List;
 
 @Mod.EventBusSubscriber(modid = tpCast.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModEvent {
-    public static float levelCostBack = (float)Config.levelCostBack;
-    public static float levelCostHome = (float)Config.levelCostHome;
-    public static float levelCostTPA = (float)Config.levelCostTPA;
-    public static float levelCostSPAWN = (float)Config.levelCostSPAWN;
+    public static final ResourceKey<Level> twf = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation("twilightforest:twilight_forest"));
+//    public static float levelCostBack = (float)Config.levelCostBack;
+//    public static float levelCostHome = (float)Config.levelCostHome;
+//    public static float levelCostTPA = (float)Config.levelCostTPA;
+//    public static float levelCostSPAWN = (float)Config.levelCostSPAWN;
     @Mod.EventBusSubscriber(modid = tpCast.MODID)
     public static class RegisterCommands {
         static public void printSTr(String str) {
@@ -172,7 +174,7 @@ public class ModEvent {
                                      teleporter.teleportTo( target.getLevel(),
                                              tPos.getX(),tPos.getY()+1,tPos.getZ(),
                                              teleporter.getYRot(),teleporter.getXRot());
-                                     tag.castOverload(levelCostTPA);
+                                     tag.castOverload((float) Config.levelCostTPA);
                                      str.sendCoolDownInfoMsg();
                                  }
                              }
@@ -284,7 +286,7 @@ public class ModEvent {
                             return -1;
                         }
                         if (tag.hasKey(tag.HomePosAlias)) {
-                            tag.castOverload(levelCostHome);
+                            tag.castOverload((float) Config.levelCostHome);
                             Pair<Vec3,String> home = tag.getHome();
                             ResourceLocation rl = new ResourceLocation(home.getRight());
 
@@ -312,13 +314,14 @@ public class ModEvent {
                         }
 
                         MinecraftServer server = player.getServer();
-                        ServerLevel sl = server.getLevel(Level.OVERWORLD);
+//                        ServerLevel sl = server.getLevel(Level.OVERWORLD);
+                        ServerLevel sl = server.getLevel(twf);
 
                         int x = sl.getSharedSpawnPos().getX();
                         int y = sl.getSharedSpawnPos().getY();
                         int z = sl.getSharedSpawnPos().getZ();
 
-                        tag.castOverload(levelCostSPAWN);
+                        tag.castOverload((float) Config.levelCostSPAWN);
                         player.teleportTo( sl,
                                 x,y,z,
                                 player.getYRot(),player.getXRot());
@@ -326,6 +329,21 @@ public class ModEvent {
                         return 1;
                     })
             );
+//            event.getDispatcher().register(
+//                    Commands.literal("setSpawn").executes(ctx -> {
+//                        ServerPlayer player = ctx.getSource().getPlayerOrException();
+//
+//                        player.sendSystemMessage(Component.literal(player.getLevel().dimension().location().toString()), false);
+//                        player.sendSystemMessage(Component.literal(player.getLevel().dimension().toString()), false);
+//
+//                        CompoundTag tag;
+////                        ctx.getSource().getServer().getWorldData().
+//                        return 1;
+//                    })
+//                    .requires(ctx-> {
+//                        return ctx.hasPermission(4);
+//                    })
+//            );
             event.getDispatcher().register(
                     Commands.literal("back").executes(ctx -> {
                         ServerPlayer player = ctx.getSource().getPlayerOrException();
@@ -337,7 +355,7 @@ public class ModEvent {
                             return -1;
                         }
                         if (tag.hasKey(tag.BackPosAlias)) {
-                            tag.castOverload(levelCostBack);
+                            tag.castOverload((float) Config.levelCostBack);
                             Pair<Vec3,String> home = tag.getBack();
                             ResourceLocation rl = new ResourceLocation(home.getRight());
                             ResourceKey<Level> mydim = ResourceKey.create(Registry.DIMENSION_REGISTRY,rl);
