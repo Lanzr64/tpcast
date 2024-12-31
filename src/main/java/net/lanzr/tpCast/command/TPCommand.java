@@ -1,16 +1,15 @@
 package net.lanzr.tpCast.command;
 
+import net.lanzr.tpCast.api.LZCommonForgeApi;
 import net.lanzr.tpCast.api.tpCastStr;
 import net.lanzr.tpCast.api.tpCastTag;
 import net.lanzr.tpCast.config.Config;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.coordinates.Vec2Argument;
-import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.core.Registry;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -75,8 +74,7 @@ public class TPCommand {
         if(gLv > tag.MaxLevel) {
             long remain = tag.getCoolDownStamp() - gt - tag.CoolDownPiece * tag.MaxLevel;
             remain = remain < 0 ? 0 : remain / 10;
-            player.sendMessage(new TextComponent(String.format("熔断恢复倒计时 %d:%d ", remain/60, remain %60))
-                    .withStyle(ChatFormatting.RED), Util.NIL_UUID);
+            LZCommonForgeApi.sendSystemMessage(player,String.format("熔断恢复倒计时 %d:%d ", remain/60, remain %60),LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
             return 0;
         }
         return 1;
@@ -84,8 +82,8 @@ public class TPCommand {
     private static int cb_resetCoolDown(ServerPlayer player,ServerPlayer targetPlayer,long gt) {
         tpCastTag tag = new tpCastTag(targetPlayer);
         tag.setCoolDownStamp(gt);
-        targetPlayer.sendMessage(new TextComponent(String.format("%s SAMA清除了你的过载", player.getName().getString()))
-                .withStyle(ChatFormatting.AQUA), Util.NIL_UUID);
+        LZCommonForgeApi.sendSystemMessage(player,String.format("%s SAMA清除了 %s 的过载", player.getName().getString(),
+                targetPlayer.getName().getString()),LZCommonForgeApi.MsgTypes.OTHER.getmFmt());
         return 0;
     }
     private static int cb_castAssist(ServerPlayer player,ServerPlayer targetPlayer) {
@@ -103,9 +101,7 @@ public class TPCommand {
             tpCastStr tagetStr = new tpCastStr(targetPlayer);
 
             targetTag.castOverload((float) -1.4);
-
-            targetPlayer.sendMessage(new TextComponent(String.format("%s 对你的祈福生效了！ ", player.getName().getString()))
-                    .withStyle(ChatFormatting.AQUA), Util.NIL_UUID);
+            LZCommonForgeApi.sendSystemMessage(player,String.format("%s 对你的祈福生效了！ ", targetPlayer.getName().getString()),LZCommonForgeApi.MsgTypes.OTHER.getmFmt());
 
             str.sendCoolDownInfoMsg();
             tagetStr.sendCoolDownInfoMsg();
@@ -115,8 +111,7 @@ public class TPCommand {
 
     private static int cb_sethome(ServerPlayer player) {
         tpCastTag tag = new tpCastTag(player);
-        player.sendMessage(new TextComponent("home核心 已就绪")
-                .withStyle(ChatFormatting.YELLOW), Util.NIL_UUID);
+        LZCommonForgeApi.sendSystemMessage(player,"home核心 已就绪",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
         tag.setHome();
         return 1;
     }
@@ -141,8 +136,7 @@ public class TPCommand {
             str.sendCoolDownInfoMsg();
             return 1;
         } else {
-            player.sendMessage(new TextComponent("你无家可归!")
-                    .withStyle(ChatFormatting.YELLOW), Util.NIL_UUID);
+            LZCommonForgeApi.sendSystemMessage(player,"你无家可归!",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
             return -1;
         }
     }
@@ -188,8 +182,7 @@ public class TPCommand {
             str.sendCoolDownInfoMsg();
             return 1;
         } else {
-            player.sendMessage(new TextComponent("你还没死呢!")
-                    .withStyle(ChatFormatting.YELLOW), Util.NIL_UUID);
+            LZCommonForgeApi.sendSystemMessage(player,"你还没死呢!",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
             return -1;
         }
     }

@@ -1,12 +1,13 @@
 package net.lanzr.tpCast.command;
 
+import net.lanzr.tpCast.api.LZCommonForgeApi;
 import net.lanzr.tpCast.api.tpCastStr;
 import net.lanzr.tpCast.api.tpCastTag;
 import net.lanzr.tpCast.config.Config;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -27,8 +28,9 @@ public class TOYCommand {
     private static int cb_castOff(ServerPlayer player) {
         Inventory inv = player.getInventory();
         inv.dropAll();
-        player.sendMessage(new TextComponent("Cast! Off !!!!!")
-                .withStyle(ChatFormatting.YELLOW), Util.NIL_UUID);
+
+        LZCommonForgeApi.sendSystemMessage(player, "Cast! Off !!!!!", LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+
         return 0;
     }
     private static int cb_tyj(ServerPlayer player) {
