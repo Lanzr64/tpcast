@@ -14,7 +14,7 @@ import java.text.CollationElementIterator;
 public class tpCastTag {
     private CompoundTag mTag;
     private ServerPlayer mPlayer;
-    final public int CoolDownPiece = 4800; // 10 = 1s
+    final public int CoolDownPiece = Config.levelCoolDownPerLevel * 10; // 10 = 1s
     final public int MaxLevel = Config.maxLevel;
     final public long MaxCoolDown = MaxLevel *CoolDownPiece;
     final private double punishLevel = Config.levelPunishFuseBlow;
@@ -61,6 +61,7 @@ public class tpCastTag {
     public void setCoolDownStamp(long stamp) {
         mTag.putLong(CoolDownStampAlias,stamp);
     }
+
     public long getCoolDownStamp() {
         return mTag.getLong(CoolDownStampAlias);
     }

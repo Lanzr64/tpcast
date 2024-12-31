@@ -1,6 +1,10 @@
 package net.lanzr.tpCast.api;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 
 public class tpCastStr {
@@ -60,7 +64,8 @@ public class tpCastStr {
             }
             str.append("]-过载等级: "+gLv);
         }
-        mPlayer.sendSystemMessage(Component.literal(str.toString()),true);
+        mPlayer.sendMessage(new TextComponent(str.toString())
+                .withStyle(ChatFormatting.WHITE), ChatType.GAME_INFO, Util.NIL_UUID);
         return ret;
     }
 }

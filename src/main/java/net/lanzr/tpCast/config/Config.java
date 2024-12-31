@@ -29,6 +29,7 @@ public class Config
 
     private static ForgeConfigSpec.IntValue MAX_LEVEL;
 
+    private static ForgeConfigSpec.IntValue LEVEL_COOLDOWN_PERLEVEL;
     private static ForgeConfigSpec.DoubleValue LEVEL_COST_BACK;
     private static ForgeConfigSpec.DoubleValue LEVEL_COST_HOME;
     private static ForgeConfigSpec.DoubleValue LEVEL_COST_TPA;
@@ -38,6 +39,7 @@ public class Config
 
     public static boolean logDirtBlock;
     public static int maxLevel;
+    public static int levelCoolDownPerLevel;
     public static double levelCostBack;
     public static double levelCostHome;
     public static double levelCostTPA;
@@ -57,6 +59,9 @@ public class Config
         MAX_LEVEL = builder
                 .comment("the max overload level")
                 .defineInRange("max level", 3, 0, Integer.MAX_VALUE);
+        LEVEL_COOLDOWN_PERLEVEL = builder
+                .comment("cooldown per level # unit: second")
+                .defineInRange("cooldown per level", 180, 0, Integer.MAX_VALUE);
         LEVEL_COST_BACK = builder
                 .comment("back cost level")
                 .defineInRange("back cost", 0.5f, 0.f, 100.f);
@@ -79,6 +84,8 @@ public class Config
     static void onLoad(final ModConfigEvent event)
     {
         maxLevel = MAX_LEVEL.get();
+
+        levelCoolDownPerLevel = LEVEL_COOLDOWN_PERLEVEL.get();
         levelCostBack = LEVEL_COST_BACK.get();
         levelCostHome = LEVEL_COST_HOME.get();
         levelCostTPA = LEVEL_COST_TPA.get();
