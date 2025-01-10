@@ -1,17 +1,13 @@
 package net.lanzr.tpCast.command;
 
-import com.mojang.authlib.minecraft.TelemetryPropertyContainer;
 import net.lanzr.tpCast.api.LZCommonForgeApi;
 import net.lanzr.tpCast.api.tpCastStr;
 import net.lanzr.tpCast.api.tpCastTag;
 import net.lanzr.tpCast.api.tpTools;
 import net.lanzr.tpCast.config.Config;
-import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.RegisterCommandsEvent;
 
