@@ -74,7 +74,7 @@ public class TPACommand {
                     tpCastTag tag = new tpCastTag(teleporter);
                     tpCastStr str = new tpCastStr(teleporter);
 
-                    boolean castAble = (tag.getCoolDownLevel(teleporter.getLevel().getGameTime()) <= tag.MaxLevel);
+                    boolean castAble = (tag.getCoolDownLevel(LZCommonForgeApi.playerGetLevel(teleporter).getGameTime()) <= tag.MaxLevel);
                     if(!castAble) {
 
                         LZCommonForgeApi.sendSystemMessage(player,"已经过载，无法传送",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
@@ -83,7 +83,7 @@ public class TPACommand {
                     }
 
                     // 在这里进行判定检测是否可以传送
-                    teleporter.teleportTo( target.getLevel(),
+                    teleporter.teleportTo( target.serverLevel(),
                             tPos.getX(),tPos.getY()+1,tPos.getZ(),
                             teleporter.getYRot(),teleporter.getXRot());
                     tag.castOverload((float) Config.levelCostTPA);
@@ -108,7 +108,7 @@ public class TPACommand {
                     tpCastTag tag = new tpCastTag(teleporter);
                     tpCastStr str = new tpCastStr(teleporter);
 
-                    boolean castAble = (tag.getCoolDownLevel(teleporter.getLevel().getGameTime()) <= tag.MaxLevel);
+                    boolean castAble = (tag.getCoolDownLevel(LZCommonForgeApi.playerGetLevel(teleporter).getGameTime()) <= tag.MaxLevel);
                     if(!castAble) {
                         LZCommonForgeApi.sendSystemMessage(teleporter,"已经过载，无法传送",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
                         str.sendCoolDownInfoMsg();
@@ -116,7 +116,7 @@ public class TPACommand {
                     }
 
                     // 在这里进行判定检测是否可以传送
-                    teleporter.teleportTo( target.getLevel(),
+                    teleporter.teleportTo( target.serverLevel(),
                             tPos.getX(),tPos.getY()+1,tPos.getZ(),
                             teleporter.getYRot(),teleporter.getXRot());
                     tag.castOverload((float) Config.levelCostTPA);

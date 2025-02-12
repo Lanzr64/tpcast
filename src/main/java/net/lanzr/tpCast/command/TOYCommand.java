@@ -32,7 +32,7 @@ public class TOYCommand {
     private static int cb_tyj(ServerPlayer player) {
         tpCastTag tag = new tpCastTag(player);
         tpCastStr str = new tpCastStr(player);
-        boolean castAble = (tag.getCoolDownLevel(player.getLevel().getGameTime()) <= tag.MaxLevel);
+        boolean castAble = (tag.getCoolDownLevel(LZCommonForgeApi.playerGetLevel(player).getGameTime()) <= tag.MaxLevel);
         if(!castAble) {
             str.sendCoolDownInfoMsg();
             return -1;

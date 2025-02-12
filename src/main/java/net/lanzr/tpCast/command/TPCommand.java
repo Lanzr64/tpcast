@@ -8,6 +8,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.coordinates.Vec2Argument;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -67,7 +68,7 @@ public class TPCommand {
         tpCastTag tag = new tpCastTag(player);
         tpCastStr str = new tpCastStr(player);
         str.sendCoolDownInfoMsg();
-        long gt = player.getLevel().getGameTime();
+        long gt = LZCommonForgeApi.playerGetLevel(player).getGameTime();
         int gLv = tag.getCoolDownLevel(gt);
         if(gLv > tag.MaxLevel) {
             long remain = tag.getCoolDownStamp() - gt - tag.CoolDownPiece * tag.MaxLevel;
@@ -88,7 +89,7 @@ public class TPCommand {
         if(targetPlayer.getUUID() != player.getUUID()) {
             tpCastTag tag = new tpCastTag(player);
             tpCastStr str = new tpCastStr(player);
-            boolean castAble = (tag.getCoolDownLevel(player.getLevel().getGameTime()) <= tag.MaxLevel);
+            boolean castAble = (tag.getCoolDownLevel(LZCommonForgeApi.playerGetLevel(player).getGameTime()) <= tag.MaxLevel);
             if(!castAble) {
                 str.sendCoolDownInfoMsg();
                 return -1;
@@ -117,7 +118,7 @@ public class TPCommand {
     private static int cb_home(ServerPlayer player) {
         tpCastTag tag = new tpCastTag(player);
         tpCastStr str = new tpCastStr(player);
-        boolean castAble = (tag.getCoolDownLevel(player.getLevel().getGameTime()) <= tag.MaxLevel);
+        boolean castAble = (tag.getCoolDownLevel(LZCommonForgeApi.playerGetLevel(player).getGameTime()) <= tag.MaxLevel);
         if(!castAble) {
             str.sendCoolDownInfoMsg();
             return -1;
@@ -128,7 +129,7 @@ public class TPCommand {
             ResourceLocation rl = new ResourceLocation(home.getRight());
 
 
-            ResourceKey<Level> mydim = ResourceKey.create(Registry.DIMENSION_REGISTRY,rl);
+            ResourceKey<Level> mydim = ResourceKey.create(Registries.DIMENSION,rl);
             player.teleportTo(player.getServer().getLevel(mydim), home.getLeft().x,home.getLeft().y+1,home.getLeft().z,player.getYRot(),player.getXRot());
 
             str.sendCoolDownInfoMsg();
@@ -141,7 +142,7 @@ public class TPCommand {
     private static int cb_spawn(ServerPlayer player) {
         tpCastTag tag = new tpCastTag(player);
         tpCastStr str = new tpCastStr(player);
-        boolean castAble = (tag.getCoolDownLevel(player.getLevel().getGameTime()) <= tag.MaxLevel);
+        boolean castAble = (tag.getCoolDownLevel(LZCommonForgeApi.playerGetLevel(player).getGameTime()) <= tag.MaxLevel);
         if(!castAble) {
             str.sendCoolDownInfoMsg();
             return -1;
@@ -165,7 +166,7 @@ public class TPCommand {
     private static int cb_back(ServerPlayer player) {
         tpCastTag tag = new tpCastTag(player);
         tpCastStr str = new tpCastStr(player);
-        boolean castAble = (tag.getCoolDownLevel(player.getLevel().getGameTime()) <= tag.MaxLevel);
+        boolean castAble = (tag.getCoolDownLevel(LZCommonForgeApi.playerGetLevel(player).getGameTime()) <= tag.MaxLevel);
         if(!castAble) {
             str.sendCoolDownInfoMsg();
             return -1;
@@ -174,7 +175,7 @@ public class TPCommand {
             tag.castOverload((float) Config.levelCostBack);
             Pair<Vec3,String> home = tag.getBack();
             ResourceLocation rl = new ResourceLocation(home.getRight());
-            ResourceKey<Level> mydim = ResourceKey.create(Registry.DIMENSION_REGISTRY,rl);
+            ResourceKey<Level> mydim = ResourceKey.create(Registries.DIMENSION,rl);
             player.teleportTo(player.getServer().getLevel(mydim), home.getLeft().x,home.getLeft().y+1,home.getLeft().z,player.getYRot(),player.getXRot());
             tag.rmKey(tag.BackPosAlias);
             str.sendCoolDownInfoMsg();
@@ -193,7 +194,7 @@ public class TPCommand {
     private static int cb_overloadTP(ServerPlayer player, Vec3 pos) {
         tpCastTag tag = new tpCastTag(player);
         tpCastStr str = new tpCastStr(player);
-        boolean castAble = (tag.getCoolDownLevel(player.getLevel().getGameTime()) <= tag.MaxLevel);
+        boolean castAble = (tag.getCoolDownLevel(LZCommonForgeApi.playerGetLevel(player).getGameTime()) <= tag.MaxLevel);
         if(!castAble) {
             str.sendCoolDownInfoMsg();
             return -1;
