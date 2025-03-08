@@ -17,24 +17,20 @@ import java.util.Set;
 @EventBusSubscriber(modid = tpCast.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class Config
 {
-//    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
+    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
+
     public static final ModConfigSpec SPEC;
-    static {
-        ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
-        setup(BUILDER);
-        SPEC = BUILDER.build();
-    }
 
-    private static ModConfigSpec.IntValue MAX_LEVEL;
+    private static final ModConfigSpec.IntValue MAX_LEVEL;
 
-    private static ModConfigSpec.IntValue LEVEL_COOLDOWN_PERLEVEL;
-    private static ModConfigSpec.DoubleValue LEVEL_COST_BACK;
-    private static ModConfigSpec.DoubleValue LEVEL_COST_HOME;
-    private static ModConfigSpec.DoubleValue LEVEL_COST_TPA;
-    private static ModConfigSpec.DoubleValue LEVEL_COST_SPAWN;
-    private static ModConfigSpec.DoubleValue LEVEL_PUNISH_FUSE_BLOW;
-    private static ModConfigSpec.DoubleValue LEVEL_COST_MARK_BASE;
-    private static ModConfigSpec.DoubleValue LEVEL_COST_MARK_ADD;
+    private static final ModConfigSpec.IntValue LEVEL_COOLDOWN_PERLEVEL;
+    private static final ModConfigSpec.DoubleValue LEVEL_COST_BACK;
+    private static final ModConfigSpec.DoubleValue LEVEL_COST_HOME;
+    private static final ModConfigSpec.DoubleValue LEVEL_COST_TPA;
+    private static final ModConfigSpec.DoubleValue LEVEL_COST_SPAWN;
+    private static final ModConfigSpec.DoubleValue LEVEL_PUNISH_FUSE_BLOW;
+    private static final ModConfigSpec.DoubleValue LEVEL_COST_MARK_BASE;
+    private static final ModConfigSpec.DoubleValue LEVEL_COST_MARK_ADD;
 
 
     public static int maxLevel;
@@ -47,45 +43,39 @@ public class Config
     public static double levelCostMarkBase;
     public static double levelCostMarkAdd;
 
-    public static String magicNumberIntroduction;
-    public static Set<Item> items;
-
-    private static boolean validateItemName(final Object obj)
-    {
-        return obj instanceof final String itemName && BuiltInRegistries.ITEM.containsKey(ResourceLocation.parse(itemName));
-    }
-
-    private static void setup(ModConfigSpec.Builder builder) {
-        builder.push("tpcast setup");
-        MAX_LEVEL = builder
+    static {
+        ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
+        BUILDER.push("tpcast setup");
+        MAX_LEVEL = BUILDER
                 .comment("the max overload level")
-                .defineInRange("max level", 3, 0, Integer.MAX_VALUE);
-        LEVEL_COOLDOWN_PERLEVEL = builder
+                .defineInRange("max level", 5, 0, Integer.MAX_VALUE);
+        LEVEL_COOLDOWN_PERLEVEL = BUILDER
                 .comment("cooldown per level # unit: second")
                 .defineInRange("cooldown per level", 180, 0, Integer.MAX_VALUE);
-        LEVEL_COST_BACK = builder
+        LEVEL_COST_BACK = BUILDER
                 .comment("back cost level")
                 .defineInRange("back cost", 0.5f, 0.f, 100.f);
-        LEVEL_COST_HOME = builder
+        LEVEL_COST_HOME = BUILDER
                 .comment("home cost level")
                 .defineInRange("home cost", 0.25f, 0.f, 100.f);
-        LEVEL_COST_TPA = builder
+        LEVEL_COST_TPA = BUILDER
                 .comment("tpa cost level")
                 .defineInRange("tpa cost", 1.5f, 0.f, 100.f);
-        LEVEL_COST_SPAWN = builder
+        LEVEL_COST_SPAWN = BUILDER
                 .comment("spawn cost level")
                 .defineInRange("spawn cost", 1.f, 0.f, 100.f);
-        LEVEL_PUNISH_FUSE_BLOW = builder
+        LEVEL_PUNISH_FUSE_BLOW = BUILDER
                 .comment("Punishment level after fuse blow")
                 .defineInRange("punishment", 2.f, 0.f, 100.f);
-        LEVEL_COST_MARK_BASE = builder
+        LEVEL_COST_MARK_BASE = BUILDER
                 .comment("mark base cost level")
                 .defineInRange("mark base cost", 1.f, 0.f, 100.f);
-        LEVEL_COST_MARK_ADD = builder
+        LEVEL_COST_MARK_ADD = BUILDER
                 .comment("mark add cost level")
                 .defineInRange("mark add cost", 0.2f, 0.f, 100.f);
 
-        builder.pop();
+        BUILDER.pop();
+        SPEC = BUILDER.build();
     }
 
     @SubscribeEvent

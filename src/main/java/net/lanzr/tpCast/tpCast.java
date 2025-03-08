@@ -22,7 +22,7 @@ public class tpCast
 //        modContainer.registerExtensionPoint(IExtensionPoint.class, () ->
 //                new IExtensionPoint(() ->
 //                        .IGNORESERVERONLY, (a, b) -> true));
-        modContainer.registerConfig(ModConfig.Type.SERVER, Config.SPEC,"tpcast-server.toml");
+        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC,"tpcast-server.toml");
     }
 
 }
