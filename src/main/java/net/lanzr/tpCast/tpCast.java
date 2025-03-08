@@ -2,12 +2,8 @@ package net.lanzr.tpCast;
 
 import com.mojang.logging.LogUtils;
 import net.lanzr.tpCast.config.Config;
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.IExtensionPoint;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import org.slf4j.Logger;
@@ -27,7 +23,6 @@ public class tpCast
 //                new IExtensionPoint(() ->
 //                        .IGNORESERVERONLY, (a, b) -> true));
         modContainer.registerConfig(ModConfig.Type.SERVER, Config.SPEC,"tpcast-server.toml");
-
     }
 
 }

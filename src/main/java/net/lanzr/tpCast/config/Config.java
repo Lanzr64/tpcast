@@ -33,9 +33,10 @@ public class Config
     private static ModConfigSpec.DoubleValue LEVEL_COST_TPA;
     private static ModConfigSpec.DoubleValue LEVEL_COST_SPAWN;
     private static ModConfigSpec.DoubleValue LEVEL_PUNISH_FUSE_BLOW;
+    private static ModConfigSpec.DoubleValue LEVEL_COST_MARK_BASE;
+    private static ModConfigSpec.DoubleValue LEVEL_COST_MARK_ADD;
 
 
-    public static boolean logDirtBlock;
     public static int maxLevel;
     public static int levelCoolDownPerLevel;
     public static double levelCostBack;
@@ -43,6 +44,8 @@ public class Config
     public static double levelCostTPA;
     public static double levelCostSPAWN;
     public static double levelPunishFuseBlow;
+    public static double levelCostMarkBase;
+    public static double levelCostMarkAdd;
 
     public static String magicNumberIntroduction;
     public static Set<Item> items;
@@ -65,7 +68,7 @@ public class Config
                 .defineInRange("back cost", 0.5f, 0.f, 100.f);
         LEVEL_COST_HOME = builder
                 .comment("home cost level")
-                .defineInRange("home cost", 1.f, 0.f, 100.f);
+                .defineInRange("home cost", 0.25f, 0.f, 100.f);
         LEVEL_COST_TPA = builder
                 .comment("tpa cost level")
                 .defineInRange("tpa cost", 1.5f, 0.f, 100.f);
@@ -75,6 +78,13 @@ public class Config
         LEVEL_PUNISH_FUSE_BLOW = builder
                 .comment("Punishment level after fuse blow")
                 .defineInRange("punishment", 2.f, 0.f, 100.f);
+        LEVEL_COST_MARK_BASE = builder
+                .comment("mark base cost level")
+                .defineInRange("mark base cost", 1.f, 0.f, 100.f);
+        LEVEL_COST_MARK_ADD = builder
+                .comment("mark add cost level")
+                .defineInRange("mark add cost", 0.2f, 0.f, 100.f);
+
         builder.pop();
     }
 
@@ -82,12 +92,13 @@ public class Config
     static void onLoad(final ModConfigEvent event)
     {
         maxLevel = MAX_LEVEL.get();
-
         levelCoolDownPerLevel = LEVEL_COOLDOWN_PERLEVEL.get();
         levelCostBack = LEVEL_COST_BACK.get();
         levelCostHome = LEVEL_COST_HOME.get();
         levelCostTPA = LEVEL_COST_TPA.get();
         levelCostSPAWN = LEVEL_COST_SPAWN.get();
         levelPunishFuseBlow = LEVEL_PUNISH_FUSE_BLOW.get();
+        levelCostMarkBase = LEVEL_COST_MARK_BASE.get();
+        levelCostMarkAdd = LEVEL_COST_MARK_ADD.get();
     }
 }

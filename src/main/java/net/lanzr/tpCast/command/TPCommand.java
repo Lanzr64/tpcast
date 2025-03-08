@@ -22,12 +22,6 @@ public class TPCommand {
     public static void register(net.neoforged.neoforge.event.RegisterCommandsEvent event) {
 
         event.getDispatcher().register(
-                Commands.literal("sethome").executes(ctx -> cb_sethome(ctx.getSource().getPlayerOrException()))
-        );
-        event.getDispatcher().register(
-                Commands.literal("home").executes(ctx -> cb_home(ctx.getSource().getPlayerOrException()))
-        );
-        event.getDispatcher().register(
                 Commands.literal("spawn").executes(ctx -> cb_spawn(ctx.getSource().getPlayerOrException()))
         );
         event.getDispatcher().register(
@@ -106,37 +100,7 @@ public class TPCommand {
         return  1;
     }
 
-    private static int cb_sethome(ServerPlayer player) {
-        tpCastTag tag = new tpCastTag(player);
-        LZCommonForgeApi.sendSystemMessage(player,"home核心 已就绪",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
-        tag.setHome();
-        return 1;
-    }
 
-    private static int cb_home(ServerPlayer player) {
-        tpCastTag tag = new tpCastTag(player);
-        tpCastStr str = new tpCastStr(player);
-        boolean castAble = (tag.getCoolDownLevel(LZCommonForgeApi.playerGetLevel(player).getGameTime()) <= tag.MaxLevel);
-        if(!castAble) {
-            str.sendCoolDownInfoMsg();
-            return -1;
-        }
-        if (tag.hasKey(tag.HomePosAlias)) {
-            tag.castOverload((float) Config.levelCostHome);
-            Pair<Vec3,String> home = tag.getHome();
-            ResourceLocation rl = LZCommonForgeApi.getDimensionResourceLocation(home.getRight());
-
-
-            ResourceKey<Level> mydim = ResourceKey.create(Registries.DIMENSION,rl);
-            player.teleportTo(player.getServer().getLevel(mydim), home.getLeft().x,home.getLeft().y+1,home.getLeft().z,player.getYRot(),player.getXRot());
-
-            str.sendCoolDownInfoMsg();
-            return 1;
-        } else {
-            LZCommonForgeApi.sendSystemMessage(player,"你无家可归!",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
-            return -1;
-        }
-    }
     private static int cb_spawn(ServerPlayer player) {
         tpCastTag tag = new tpCastTag(player);
         tpCastStr str = new tpCastStr(player);

@@ -1,9 +1,7 @@
 package net.lanzr.tpCast.events;
 
 import net.lanzr.tpCast.api.tpCastTag;
-import net.lanzr.tpCast.command.TOYCommand;
-import net.lanzr.tpCast.command.TPACommand;
-import net.lanzr.tpCast.command.TPCommand;
+import net.lanzr.tpCast.command.*;
 import net.lanzr.tpCast.tpCast;
 //import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,8 +43,10 @@ public class ModEvent {
         }
         @SubscribeEvent
         public static void CommandRegistration(RegisterCommandsEvent event) {
+            MARKCommand.register(event);
             TPACommand.register(event);
             TPCommand.register(event);
             TOYCommand.register(event);
+            HOMECommand.register(event);
         }
 }
