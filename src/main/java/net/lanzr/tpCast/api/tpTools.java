@@ -1,7 +1,14 @@
 package net.lanzr.tpCast.api;
 
+import net.lanzr.tpCast.config.Config;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 public class tpTools {
     public class tpaRequests {
@@ -43,5 +50,17 @@ public class tpTools {
             }
             return null;
         }
+    }
+    public static int overloadcheckFunc(ServerPlayer player, Supplier<Integer> func) {
+        tpCastTag tag = new tpCastTag(player);
+        tpCastStr str = new tpCastStr(player);
+        boolean castAble = (tag.getCoolDownLevel(LZCommonForgeApi.playerGetLevel(player).getGameTime()) <= tag.MaxLevel);
+        if(!castAble) {
+            str.sendCoolDownInfoMsg();
+            return -1;
+        }
+        func.get();
+        // 允许使用功能
+        return 1;
     }
 }

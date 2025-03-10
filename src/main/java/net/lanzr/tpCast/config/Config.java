@@ -69,7 +69,7 @@ public class Config
                 .defineInRange("punishment", 2.f, 0.f, 100.f);
         LEVEL_COST_MARK_BASE = BUILDER
                 .comment("mark base cost level")
-                .defineInRange("mark base cost", 1.f, 0.f, 100.f);
+                .defineInRange("mark base cost", 0.8f, 0.f, 100.f);
         LEVEL_COST_MARK_ADD = BUILDER
                 .comment("mark add cost level")
                 .defineInRange("mark add cost", 0.2f, 0.f, 100.f);

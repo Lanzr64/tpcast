@@ -73,8 +73,9 @@ public class TPCommand {
     private static int cb_resetCoolDown(ServerPlayer player,ServerPlayer targetPlayer,long gt) {
         tpCastTag tag = new tpCastTag(targetPlayer);
         tag.setCoolDownStamp(gt);
-        LZCommonForgeApi.sendSystemMessage(player,String.format("%s SAMA清除了 %s 的过载", player.getName().getString(),
-                targetPlayer.getName().getString()),LZCommonForgeApi.MsgTypes.OTHER.getmFmt());
+        LZCommonForgeApi.sendSystemMessage(player,
+                String.format("%s SAMA清除了 %s 的过载", player.getName().getString(),targetPlayer.getName().getString()),
+                LZCommonForgeApi.MsgTypes.OTHER.getmFmt());
         return 0;
     }
     private static int cb_castAssist(ServerPlayer player,ServerPlayer targetPlayer) {

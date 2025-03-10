@@ -33,9 +33,12 @@ public class tpCastTag {
         CompoundTag pTag = player.getPersistentData();
         mTag  = pTag.getCompound(tpCast.MODID);
         mPlayer = player;
+
+        // 不存在
         if(!pTag.contains(tpCast.MODID)) {
             pTag.put(tpCast.MODID,mTag);
         }
+
         // 不存在冷却时间 init
         if(!mTag.contains(CoolDownStampAlias)) {
             mTag.putLong(CoolDownStampAlias,LZCommonForgeApi.playerGetLevel(player).getGameTime());
