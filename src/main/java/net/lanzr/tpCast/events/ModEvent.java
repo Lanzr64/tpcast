@@ -4,7 +4,6 @@ import net.lanzr.tpCast.api.tpCastTag;
 import net.lanzr.tpCast.command.TOYCommand;
 import net.lanzr.tpCast.command.TPACommand;
 import net.lanzr.tpCast.command.TPCommand;
-import net.lanzr.tpCast.player.CastPlayerList;
 import net.lanzr.tpCast.tpCast;
 //import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
@@ -35,17 +34,6 @@ public class ModEvent {
 //            tpCastTag tag = new tpCastTag(player);
 ////            boolean isPlayer = event.getEntity() instanceof ServerPlayer;
 //        }
-        @SubscribeEvent(priority = EventPriority.HIGHEST)
-        public static synchronized void onPlayerConnect(PlayerEvent.PlayerLoggedInEvent event) {
-            CastPlayerList.add((ServerPlayer) event.getEntity());
-            printSTr("player connect");
-        }
-
-        @SubscribeEvent(priority = EventPriority.HIGHEST)
-        public static synchronized void onPlayerDisconnect(PlayerEvent.PlayerLoggedOutEvent event) {
-            CastPlayerList.remove(event.getEntity().getUUID());
-            printSTr("player disconnect");
-        }
 
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static synchronized void onPlayerDeath(LivingDeathEvent event) {

@@ -14,10 +14,10 @@ import java.text.CollationElementIterator;
 public class tpCastTag {
     private CompoundTag mTag;
     private ServerPlayer mPlayer;
-    final public static int CoolDownPiece = Config.levelCoolDownPerLevel * 10; // 10 = 1s
-    final public static int MaxLevel = Config.maxLevel;
-    final public static long MaxCoolDown = (long) MaxLevel * CoolDownPiece;
-    final private static double punishLevel = Config.levelPunishFuseBlow;
+    final public int CoolDownPiece = Config.levelCoolDownPerLevel * 10; // 10 = 1s
+    final public int MaxLevel = Config.maxLevel;
+    final public long MaxCoolDown = MaxLevel *CoolDownPiece;
+    final private double punishLevel = Config.levelPunishFuseBlow;
     public String
             HomePosAlias ="homePos",
             HomeDimAlias ="homeDim",
