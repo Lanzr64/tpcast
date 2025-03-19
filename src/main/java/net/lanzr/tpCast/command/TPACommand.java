@@ -1,9 +1,6 @@
 package net.lanzr.tpCast.command;
 
-import net.lanzr.tpCast.api.LZCommonForgeApi;
-import net.lanzr.tpCast.api.tpCastStr;
-import net.lanzr.tpCast.api.tpCastTag;
-import net.lanzr.tpCast.api.tpTools;
+import net.lanzr.tpCast.api.*;
 import net.lanzr.tpCast.config.Config;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -39,21 +36,20 @@ public class TPACommand {
     private static int cb_tpa(ServerPlayer player, ServerPlayer targetPlayer) {
         if(targetPlayer.getUUID() != player.getUUID()) {
             tpTools.tpaRequests.add(targetPlayer.getUUID(),player.getUUID());
-            LZCommonForgeApi.sendSystemMessage(targetPlayer,String.format("！！！ %s 想来你的身边", player.getName().getString()),LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
-            LZCommonForgeApi.sendSystemMessage(targetPlayer,"使用 /tpy 接受 使用 /tpn 拒绝",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+            LZCommonForgeApi.sendSystemMessage(targetPlayer,String.format("！！！ %s 想来你的身边", player.getName().getString()),MsgTypes.NORMAL.getmFmt());
+            LZCommonForgeApi.sendSystemMessage(targetPlayer,"使用 /tpy 接受 使用 /tpn 拒绝", MsgTypes.NORMAL.getmFmt());
         } else {
-            LZCommonForgeApi.sendSystemMessage(player,"禁止原地tp",LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
+            LZCommonForgeApi.sendSystemMessage(player,"禁止原地tp",MsgTypes.ALERT.getmFmt());
         }
         return  1;
     }
     private static int cb_tpahere(ServerPlayer player, ServerPlayer targetPlayer) {
         if(targetPlayer.getUUID() != player.getUUID()) {
             tpTools.tpahereRequests.add(targetPlayer.getUUID(),player.getUUID());
-
-            LZCommonForgeApi.sendSystemMessage(player,String.format("！！！ %s 想把你送到他的身边", targetPlayer.getName().getString()),LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
-            LZCommonForgeApi.sendSystemMessage(player,"使用 /tpy 接受 使用 /tpn 拒绝",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+            LZCommonForgeApi.sendSystemMessage(targetPlayer,String.format("！！！ %s 想把你送到他的身边", player.getName().getString()),MsgTypes.NORMAL.getmFmt());
+            LZCommonForgeApi.sendSystemMessage(targetPlayer,"使用 /tpy 接受 使用 /tpn 拒绝",MsgTypes.NORMAL.getmFmt());
         } else {
-            LZCommonForgeApi.sendSystemMessage(player,"禁止原地tp",LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
+            LZCommonForgeApi.sendSystemMessage(player,"禁止原地tp",MsgTypes.ALERT.getmFmt());
         }
         return  1;
     }
@@ -77,7 +73,7 @@ public class TPACommand {
                     boolean castAble = (tag.getCoolDownLevel(LZCommonForgeApi.playerGetLevel(teleporter).getGameTime()) <= tag.MaxLevel);
                     if(!castAble) {
 
-                        LZCommonForgeApi.sendSystemMessage(player,"已经过载，无法传送",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+                        LZCommonForgeApi.sendSystemMessage(player,"已经过载，无法传送",MsgTypes.NORMAL.getmFmt());
                         str.sendCoolDownInfoMsg();
                         return -1;
                     }
@@ -91,7 +87,7 @@ public class TPACommand {
                 }
             }
             if (!playerFound) {
-                LZCommonForgeApi.sendSystemMessage(player,"他似乎不在",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+                LZCommonForgeApi.sendSystemMessage(player,"他似乎不在",MsgTypes.NORMAL.getmFmt());
             }
             tpTools.tpaRequests.remove(player.getUUID());
         } else if (tpTools.tpahereRequests.pending(player.getUUID())) {
@@ -110,7 +106,7 @@ public class TPACommand {
 
                     boolean castAble = (tag.getCoolDownLevel(LZCommonForgeApi.playerGetLevel(teleporter).getGameTime()) <= tag.MaxLevel);
                     if(!castAble) {
-                        LZCommonForgeApi.sendSystemMessage(teleporter,"已经过载，无法传送",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+                        LZCommonForgeApi.sendSystemMessage(teleporter,"已经过载，无法传送",MsgTypes.NORMAL.getmFmt());
                         str.sendCoolDownInfoMsg();
                         return -1;
                     }
@@ -124,11 +120,11 @@ public class TPACommand {
                 }
             }
             if (!playerFound) {
-                LZCommonForgeApi.sendSystemMessage(player,"他似乎不在",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+                LZCommonForgeApi.sendSystemMessage(player,"他似乎不在",MsgTypes.NORMAL.getmFmt());
             }
             tpTools.tpaRequests.remove(player.getUUID());
         } else {
-            LZCommonForgeApi.sendSystemMessage(player,"看起来没有tp请求",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+            LZCommonForgeApi.sendSystemMessage(player,"看起来没有tp请求",MsgTypes.NORMAL.getmFmt());
         }
         return  1;
     }
@@ -137,13 +133,13 @@ public class TPACommand {
         if (tpTools.tpaRequests.pending(player.getUUID())) {
             for (int i = 0; i < playerList.size(); ++ i) {
                 if (playerList.get(i).getUUID().equals(tpTools.tpaRequests.fromWho(player.getUUID()))) {
-                    LZCommonForgeApi.sendSystemMessage(playerList.get(i),String.format("%s 拒绝了你的tp请求", player.getName().getString()),LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+                    LZCommonForgeApi.sendSystemMessage(playerList.get(i),String.format("%s 拒绝了你的tp请求", player.getName().getString()),MsgTypes.NORMAL.getmFmt());
                 }
             }
             tpTools.tpaRequests.remove(player.getUUID());
 
         } else {
-            LZCommonForgeApi.sendSystemMessage(player,"看起来没有tp请求",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+            LZCommonForgeApi.sendSystemMessage(player,"看起来没有tp请求",MsgTypes.NORMAL.getmFmt());
         }
         return  1;
     }
