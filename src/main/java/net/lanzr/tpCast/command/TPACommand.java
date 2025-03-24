@@ -50,8 +50,8 @@ public class TPACommand {
         if(targetPlayer.getUUID() != player.getUUID()) {
             tpTools.tpahereRequests.add(targetPlayer.getUUID(),player.getUUID());
 
-            LZCommonForgeApi.sendSystemMessage(player,String.format("！！！ %s 想把你送到他的身边", targetPlayer.getName().getString()),LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
-            LZCommonForgeApi.sendSystemMessage(player,"使用 /tpy 接受 使用 /tpn 拒绝",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+            LZCommonForgeApi.sendSystemMessage(targetPlayer,String.format("！！！ %s 想把你送到他的身边", targetPlayer.getName().getString()),LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+            LZCommonForgeApi.sendSystemMessage(targetPlayer,"使用 /tpy 接受 使用 /tpn 拒绝",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
         } else {
             LZCommonForgeApi.sendSystemMessage(player,"禁止原地tp",LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
         }

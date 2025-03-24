@@ -1,13 +1,10 @@
 package net.lanzr.tpCast.api;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
-import net.minecraft.network.chat.ChatType;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 public class tpCastStr {
-    ServerPlayer mPlayer;
+    final ServerPlayer mPlayer;
     public tpCastStr(ServerPlayer player) {
         this.mPlayer = player;
     }
@@ -39,7 +36,7 @@ public class tpCastStr {
 //        player.sendSystemMessage(Component.literal("gLv is "+ gLv),true);
         return str.toString();
     }
-    public boolean sendCoolDownInfoMsg(){
+    public void sendCoolDownInfoMsg(){
         boolean ret = false;
         long gt = LZCommonForgeApi.playerGetLevel(mPlayer).getGameTime();
         tpCastTag tag = new tpCastTag(mPlayer);
@@ -64,6 +61,5 @@ public class tpCastStr {
             str.append("]-过载等级: "+gLv);
         }
         LZCommonForgeApi.sendCenterSystemMessage(mPlayer,str.toString(),ChatFormatting.WHITE);
-        return ret;
     }
 }

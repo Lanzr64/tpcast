@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class tpTools {
     public class tpaRequests {
-        private static HashMap<UUID, UUID> requests = new HashMap<UUID, UUID>();
+        private static final HashMap<UUID, UUID> requests = new HashMap<UUID, UUID>();
         public static void add(UUID target, UUID requester) {
             requests.put(target, requester);
         };
@@ -25,7 +25,7 @@ public class tpTools {
         }
     }
     public class tpahereRequests {
-        private static HashMap<UUID, UUID> requests = new HashMap<UUID, UUID>();
+        private static final HashMap<UUID, UUID> requests = new HashMap<UUID, UUID>();
         public static void add(UUID target, UUID requester) {
             requests.put(target, requester);
         };

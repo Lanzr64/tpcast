@@ -35,7 +35,8 @@ public class Config
     private static ForgeConfigSpec.DoubleValue LEVEL_COST_TPA;
     private static ForgeConfigSpec.DoubleValue LEVEL_COST_SPAWN;
     private static ForgeConfigSpec.DoubleValue LEVEL_PUNISH_FUSE_BLOW;
-
+    private static ForgeConfigSpec.DoubleValue LEVEL_COST_MARK_BASE;
+    private static ForgeConfigSpec.DoubleValue LEVEL_COST_MARK_ADD;
 
     public static boolean logDirtBlock;
     public static int maxLevel;
@@ -45,6 +46,8 @@ public class Config
     public static double levelCostTPA;
     public static double levelCostSPAWN;
     public static double levelPunishFuseBlow;
+    public static double levelCostMarkBase;
+    public static double levelCostMarkAdd;
 
     public static String magicNumberIntroduction;
     public static Set<Item> items;
@@ -77,6 +80,12 @@ public class Config
         LEVEL_PUNISH_FUSE_BLOW = builder
                 .comment("Punishment level after fuse blow")
                 .defineInRange("punishment", 2.f, 0.f, 100.f);
+        LEVEL_COST_MARK_BASE = builder
+                .comment("mark base cost level")
+                .defineInRange("mark base cost", 0.8f, 0.f, 100.f);
+        LEVEL_COST_MARK_ADD = builder
+                .comment("mark add cost level")
+                .defineInRange("mark add cost", 0.2f, 0.f, 100.f);
         builder.pop();
     }
 
@@ -91,5 +100,7 @@ public class Config
         levelCostTPA = LEVEL_COST_TPA.get();
         levelCostSPAWN = LEVEL_COST_SPAWN.get();
         levelPunishFuseBlow = LEVEL_PUNISH_FUSE_BLOW.get();
+        levelCostMarkBase = LEVEL_COST_MARK_BASE.get();
+        levelCostMarkAdd = LEVEL_COST_MARK_ADD.get();
     }
 }
