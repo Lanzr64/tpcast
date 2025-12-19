@@ -13,6 +13,9 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 
 public class TOYCommand {
     public static void register(RegisterCommandsEvent event) {
+        if (!Config.enableToy) {
+            return;
+        }
         event.getDispatcher().register(
                 Commands.literal("cast-off").executes(ctx -> cb_castOff(ctx.getSource().getPlayerOrException()))
         );

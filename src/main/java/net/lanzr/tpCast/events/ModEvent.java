@@ -76,7 +76,6 @@ public class ModEvent {
         public static void CommandRegistration(RegisterCommandsEvent event) {
             MARKCommand.register(event);
             TPACommand.register(event);
-            TPCommand.register(event);
             TOYCommand.register(event);
             HOMECommand.register(event);
         }

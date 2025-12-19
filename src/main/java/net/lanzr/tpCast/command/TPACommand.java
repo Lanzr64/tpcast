@@ -15,6 +15,9 @@ import java.util.List;
 
 public class TPACommand {
     public static void register(RegisterCommandsEvent event) {
+        if (!Config.enableTPA) {
+            return;
+        }
         event.getDispatcher().register(
                 Commands.literal("tpa")
                     .then(Commands.argument("target", EntityArgument.player())
@@ -37,6 +40,8 @@ public class TPACommand {
         );
     }
     private static int cb_tpa(ServerPlayer player, ServerPlayer targetPlayer) {
+//        player 命令发起者
+//        targetplayer 命令发送对象
         if(targetPlayer.getUUID() != player.getUUID()) {
             tpTools.tpaRequests.add(targetPlayer.getUUID(),player.getUUID());
             LZCommonForgeApi.sendSystemMessage(targetPlayer,String.format("！！！ %s 想来你的身边", player.getName().getString()),LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
@@ -50,7 +55,7 @@ public class TPACommand {
         if(targetPlayer.getUUID() != player.getUUID()) {
             tpTools.tpahereRequests.add(targetPlayer.getUUID(),player.getUUID());
 
-            LZCommonForgeApi.sendSystemMessage(targetPlayer,String.format("！！！ %s 想把你送到他的身边", targetPlayer.getName().getString()),LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+            LZCommonForgeApi.sendSystemMessage(targetPlayer,String.format("！！！ %s 想把你送到他的身边", player.getName().getString()),LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
             LZCommonForgeApi.sendSystemMessage(targetPlayer,"使用 /tpy 接受 使用 /tpn 拒绝",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
         } else {
             LZCommonForgeApi.sendSystemMessage(player,"禁止原地tp",LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
@@ -87,6 +92,7 @@ public class TPACommand {
                             tPos.getX(),tPos.getY()+1,tPos.getZ(),
                             teleporter.getYRot(),teleporter.getXRot());
                     tag.castOverload((float) Config.levelCostTPA);
+                    LZCommonForgeApi.sendSystemMessage(player,String.format("！！！ %s 接受了tp请求", target.getName().getString()),LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
                     str.sendCoolDownInfoMsg();
                 }
             }

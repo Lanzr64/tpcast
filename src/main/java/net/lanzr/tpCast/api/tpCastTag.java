@@ -126,9 +126,6 @@ public class tpCastTag {
     }
     public Set<String> getMarks() {
         Set<String> keys = mMarkList.getAllKeys();
-        for (String key : keys) {
-            System.out.println(key);
-        }
         return keys;
     }
     public Pair<Vec3, String> getMark(String name) {

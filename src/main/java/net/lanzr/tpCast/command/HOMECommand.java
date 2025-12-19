@@ -1,5 +1,6 @@
 package net.lanzr.tpCast.command;
 
+import com.mojang.logging.LogUtils;
 import net.lanzr.tpCast.api.LZCommonForgeApi;
 import net.lanzr.tpCast.api.tpCastStr;
 import net.lanzr.tpCast.api.tpCastTag;
@@ -14,19 +15,25 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
 
 public class HOMECommand {
+
+    private static final Logger LOGGER = LogUtils.getLogger();
     public static void register(RegisterCommandsEvent event) {
-//        event.getDispatcher().register(
-//                Commands.literal("sethome").executes(ctx -> cb_sethome(ctx.getSource().getPlayerOrException()))
-//        );
+        if (!Config.enableHome) {
+            return;
+        }
         event.getDispatcher().register(
 //                Commands.literal("home").executes(ctx -> cb_home(ctx.getSource().getPlayerOrException()))
                 Commands.literal("home").executes(ctx -> cb_returnBED(ctx.getSource().getPlayerOrException()))
         );
-        event.getDispatcher().register(
-                Commands.literal("home-desp").executes(ctx -> cb_home(ctx.getSource().getPlayerOrException()))
-        );
+//        event.getDispatcher().register(
+//                Commands.literal("home-desp").executes(ctx -> cb_home(ctx.getSource().getPlayerOrException()))
+//        );
+        //        event.getDispatcher().register(
+//                Commands.literal("sethome").executes(ctx -> cb_sethome(ctx.getSource().getPlayerOrException()))
+//        );
     }
 
     private static int cb_returnBED(ServerPlayer player) {
