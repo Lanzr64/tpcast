@@ -23,9 +23,6 @@ import java.util.concurrent.CompletableFuture;
 
 public class MARKCommand {
     public static void register(RegisterCommandsEvent event) {
-        if (!Config.enableMark) {
-            return;
-        }
 
         final LiteralArgumentBuilder<CommandSourceStack> literalargumentBuilder =
                 Commands.literal("mark")

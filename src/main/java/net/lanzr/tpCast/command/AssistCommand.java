@@ -11,9 +11,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 
 public class AssistCommand {
     public static void register(RegisterCommandsEvent event) {
-        if (!Config.enableAssist) {
-            return;
-        }
+
         event.getDispatcher().register(
                 Commands.literal("cast-assist")
                         .then(Commands.argument("target", EntityArgument.player())

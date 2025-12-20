@@ -21,9 +21,7 @@ public class HOMECommand {
 
     private static final Logger LOGGER = LogUtils.getLogger();
     public static void register(RegisterCommandsEvent event) {
-        if (!Config.enableHome) {
-            return;
-        }
+
         event.getDispatcher().register(
 //                Commands.literal("home").executes(ctx -> cb_home(ctx.getSource().getPlayerOrException()))
                 Commands.literal("home").executes(ctx -> cb_returnBED(ctx.getSource().getPlayerOrException()))

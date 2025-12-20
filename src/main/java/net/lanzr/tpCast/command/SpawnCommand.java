@@ -13,9 +13,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 
 public class SpawnCommand {
     public static void register(RegisterCommandsEvent event) {
-        if (!Config.enableSpawn) {
-            return;
-        }
+
         event.getDispatcher().register(
                 Commands.literal("spawn").executes(ctx -> cb_spawn(ctx.getSource().getPlayerOrException()))
         );

@@ -41,16 +41,6 @@ public class Config
     private static ForgeConfigSpec.DoubleValue INDEX_COST_DISTANT;
 
 
-    private static ForgeConfigSpec.BooleanValue ENABLE_SPAWN;
-    private static ForgeConfigSpec.BooleanValue ENABLE_HOME;
-    private static ForgeConfigSpec.BooleanValue ENABLE_BACK;
-    private static ForgeConfigSpec.BooleanValue ENABLE_TPA;
-    private static ForgeConfigSpec.BooleanValue ENABLE_MARK;
-    private static ForgeConfigSpec.BooleanValue ENABLE_TOY;
-    private static ForgeConfigSpec.BooleanValue ENABLE_ASSIST;
-    private static ForgeConfigSpec.BooleanValue ENABLE_OVERLOAD_TP;
-    private static ForgeConfigSpec.BooleanValue ENABLE_DISTANT_TP;
-
 
     public static int maxLevel;
     public static int levelCoolDownPerLevel;
@@ -68,15 +58,6 @@ public class Config
     public static double levelCostOverloadTP;
     public static double indexCostDistant;
 
-    public static boolean enableSpawn;
-    public static boolean enableHome;
-    public static boolean enableBack;
-    public static boolean enableTPA;
-    public static boolean enableMark;
-    public static boolean enableToy;
-    public static boolean enableAssist;
-    public static boolean enableOverloadTP;
-    public static boolean enableDistantTP;
 
 
     public static String magicNumberIntroduction;
@@ -136,44 +117,6 @@ public class Config
                 .comment("distant tp cost index")
                 .defineInRange("distant tp index", 1/200000000.f, 0.f, 100.f);
         builder.pop();
-
-        builder.push("ENABLE FUNCTIONS");
-        ENABLE_SPAWN = builder
-                .comment("enable spawn")
-                .define("enable spawn", true);
-
-        ENABLE_HOME = builder
-                .comment("enable home")
-                .define("enable home", true);
-
-        ENABLE_BACK = builder
-                .comment("enable back")
-                .define("enable back", true);
-
-        ENABLE_TPA = builder
-                .comment("enable tpa")
-                .define("enable tpa", true);
-
-        ENABLE_MARK = builder
-                .comment("enable mark")
-                .define("enable mark", true);
-
-        ENABLE_TOY = builder
-                .comment("enable toy")
-                .define("enable toy", true);
-
-        ENABLE_ASSIST = builder
-                .comment("enable assist")
-                .define("enable assist", true);
-
-        ENABLE_OVERLOAD_TP = builder
-                .comment("enable overload tp")
-                .define("enable overload tp", false);
-
-        ENABLE_DISTANT_TP = builder
-                .comment("enable distant tp")
-                .define("enable distant tp", false);
-        builder.pop();
     }
 
     @SubscribeEvent
@@ -197,15 +140,5 @@ public class Config
         levelCostOverloadTP = LEVEL_COST_OVERLOAD_TP.get();
         indexCostDistant = INDEX_COST_DISTANT.get();
 
-        enableSpawn = ENABLE_SPAWN.get();
-        enableHome = ENABLE_HOME.get();
-        enableBack = ENABLE_BACK.get();
-        enableTPA = ENABLE_TPA.get();
-        enableMark = ENABLE_MARK.get();
-        enableToy = ENABLE_TOY.get();
-        enableAssist = ENABLE_ASSIST.get();
-
-        enableOverloadTP = ENABLE_OVERLOAD_TP.get();
-        enableDistantTP = ENABLE_DISTANT_TP.get();
     }
 }

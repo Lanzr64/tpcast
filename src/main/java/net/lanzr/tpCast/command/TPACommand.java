@@ -15,9 +15,7 @@ import java.util.List;
 
 public class TPACommand {
     public static void register(RegisterCommandsEvent event) {
-        if (!Config.enableTPA) {
-            return;
-        }
+
         event.getDispatcher().register(
                 Commands.literal("tpa")
                     .then(Commands.argument("target", EntityArgument.player())

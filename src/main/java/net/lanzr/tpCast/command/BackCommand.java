@@ -16,9 +16,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class BackCommand {
     public static void register(RegisterCommandsEvent event) {
-        if (!Config.enableBack) {
-            return;
-        }
 
         event.getDispatcher().register(
                 Commands.literal("back").executes(ctx -> cb_back(ctx.getSource().getPlayerOrException()))
