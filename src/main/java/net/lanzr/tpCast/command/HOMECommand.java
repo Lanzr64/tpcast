@@ -1,10 +1,12 @@
 package net.lanzr.tpCast.command;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.logging.LogUtils;
 import net.lanzr.tpCast.api.LZCommonForgeApi;
 import net.lanzr.tpCast.api.tpCastStr;
 import net.lanzr.tpCast.api.tpCastTag;
 import net.lanzr.tpCast.config.Config;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -32,6 +34,13 @@ public class HOMECommand {
         //        event.getDispatcher().register(
 //                Commands.literal("sethome").executes(ctx -> cb_sethome(ctx.getSource().getPlayerOrException()))
 //        );
+        final LiteralArgumentBuilder<CommandSourceStack> literalargumentBuilder =
+                Commands.literal("tyj");
+
+        literalargumentBuilder
+                .then(Commands.literal("home").executes(ctx -> cb_returnBED(ctx.getSource().getPlayerOrException())));
+
+        event.getDispatcher().register(literalargumentBuilder);
     }
 
     private static int cb_returnBED(ServerPlayer player) {

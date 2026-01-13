@@ -4,6 +4,7 @@ import net.lanzr.tpCast.api.tpCastTag;
 import net.lanzr.tpCast.command.*;
 import net.lanzr.tpCast.tpCast;
 //import net.minecraft.core.registries.Registries;
+import net.minecraft.commands.Commands;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -78,6 +79,11 @@ public class ModEvent {
             TPACommand.register(event);
             TOYCommand.register(event);
             HOMECommand.register(event);
+            SpawnCommand.register(event);
+            BackCommand.register(event);
+            AssistCommand.register(event);
+            CommonCommand.register(event);
+
         }
     }
 

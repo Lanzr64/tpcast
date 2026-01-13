@@ -1,9 +1,13 @@
 package net.lanzr.tpCast.command;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import net.lanzr.tpCast.api.LZCommonForgeApi;
 import net.lanzr.tpCast.api.tpCastStr;
 import net.lanzr.tpCast.api.tpCastTag;
 import net.lanzr.tpCast.config.Config;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -20,6 +24,14 @@ public class BackCommand {
         event.getDispatcher().register(
                 Commands.literal("back").executes(ctx -> cb_back(ctx.getSource().getPlayerOrException()))
         );
+
+        final LiteralArgumentBuilder<CommandSourceStack> literalargumentBuilder =
+                Commands.literal("tyj");
+
+        literalargumentBuilder
+                .then(Commands.literal("back").executes(ctx -> cb_back(ctx.getSource().getPlayerOrException())));
+
+        event.getDispatcher().register(literalargumentBuilder);
     }
 
     private static int cb_back(ServerPlayer player) {
