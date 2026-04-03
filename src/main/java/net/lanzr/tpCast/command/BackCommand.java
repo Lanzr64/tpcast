@@ -3,7 +3,10 @@ package net.lanzr.tpCast.command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.lanzr.tpCast.api.LZCommonForgeApi;
+import net.lanzr.tpCast.api.TpCastPlayer;
 import net.lanzr.tpCast.api.tpCastStr;
 import net.lanzr.tpCast.api.tpCastTag;
 import net.lanzr.tpCast.config.Config;
@@ -19,41 +22,41 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class BackCommand {
+
     public static void register(RegisterCommandsEvent event) {
 
         event.getDispatcher().register(
-                Commands.literal("back").executes(ctx -> cb_back(ctx.getSource().getPlayerOrException()))
+                Commands.literal("back").executes(BACK_COMMAND)
         );
 
         final LiteralArgumentBuilder<CommandSourceStack> literalargumentBuilder =
                 Commands.literal("tyj");
 
         literalargumentBuilder
-                .then(Commands.literal("back").executes(ctx -> cb_back(ctx.getSource().getPlayerOrException())));
+                .then(Commands.literal("back").executes(BACK_COMMAND));
 
         event.getDispatcher().register(literalargumentBuilder);
     }
 
-    private static int cb_back(ServerPlayer player) {
-        tpCastTag tag = new tpCastTag(player);
-        tpCastStr str = new tpCastStr(player);
-        boolean castAble = (tag.getCoolDownLevel(LZCommonForgeApi.playerGetLevel(player).getGameTime()) <= tag.MaxLevel);
-        if(!castAble) {
-            str.sendCoolDownInfoMsg();
-            return -1;
+    private static final TpCommand BACK_COMMAND = new TpCommand() {
+        @Override
+        protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
+            if (tpPlayer.tag.hasKey(tpPlayer.tag.BackPosAlias)) {
+                tpPlayer.tag.castOverload((float) Config.levelCostBack);
+                Pair<Vec3,String> home = tpPlayer.tag.getBack();
+                ResourceLocation rl = new ResourceLocation(home.getRight());
+                ResourceKey<Level> mydim = ResourceKey.create(Registries.DIMENSION,rl);
+                tpPlayer.player.teleportTo(tpPlayer.player.getServer().getLevel(mydim),
+                        home.getLeft().x,home.getLeft().y+1,home.getLeft().z,
+                        tpPlayer.player.getYRot(),tpPlayer.player.getXRot());
+                tpPlayer.tag.rmKey(tpPlayer.tag.BackPosAlias);
+                tpPlayer.sendCoolDownInfoMsg();
+                return 1;
+            } else {
+                LZCommonForgeApi.sendSystemMessage(tpPlayer.player,"你还没死呢!",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+                return -1;
+            }
         }
-        if (tag.hasKey(tag.BackPosAlias)) {
-            tag.castOverload((float) Config.levelCostBack);
-            Pair<Vec3,String> home = tag.getBack();
-            ResourceLocation rl = new ResourceLocation(home.getRight());
-            ResourceKey<Level> mydim = ResourceKey.create(Registries.DIMENSION,rl);
-            player.teleportTo(player.getServer().getLevel(mydim), home.getLeft().x,home.getLeft().y+1,home.getLeft().z,player.getYRot(),player.getXRot());
-            tag.rmKey(tag.BackPosAlias);
-            str.sendCoolDownInfoMsg();
-            return 1;
-        } else {
-            LZCommonForgeApi.sendSystemMessage(player,"你还没死呢!",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
-            return -1;
-        }
-    }
+    };
+
 }

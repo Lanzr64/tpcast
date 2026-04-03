@@ -1,14 +1,16 @@
 package net.lanzr.tpCast.command;
 
-import net.lanzr.tpCast.api.LZCommonForgeApi;
-import net.lanzr.tpCast.api.tpCastStr;
-import net.lanzr.tpCast.api.tpCastTag;
-import net.lanzr.tpCast.api.tpTools;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.lanzr.tpCast.api.*;
 import net.lanzr.tpCast.config.Config;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.VisibleForDebug;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.RegisterCommandsEvent;
 
 import java.util.List;
@@ -37,30 +39,58 @@ public class TPACommand {
                         .executes(ctx -> cb_tpn(ctx.getSource().getPlayerOrException(),ctx.getSource().getServer().getPlayerList().getPlayers()))
         );
     }
-    private static int cb_tpa(ServerPlayer player, ServerPlayer targetPlayer) {
-//        player 命令发起者
-//        targetplayer 命令发送对象
-        if(targetPlayer.getUUID() != player.getUUID()) {
-            tpTools.tpaRequests.add(targetPlayer.getUUID(),player.getUUID());
-            LZCommonForgeApi.sendSystemMessage(targetPlayer,String.format("！！！ %s 想来你的身边", player.getName().getString()),LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
-            LZCommonForgeApi.sendSystemMessage(targetPlayer,"使用 /tpy 接受 使用 /tpn 拒绝",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
-        } else {
-            LZCommonForgeApi.sendSystemMessage(player,"禁止原地tp",LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
-        }
-        return  1;
-    }
-    private static int cb_tpahere(ServerPlayer player, ServerPlayer targetPlayer) {
-        if(targetPlayer.getUUID() != player.getUUID()) {
-            tpTools.tpahereRequests.add(targetPlayer.getUUID(),player.getUUID());
 
-            LZCommonForgeApi.sendSystemMessage(targetPlayer,String.format("！！！ %s 想把你送到他的身边", player.getName().getString()),LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
-            LZCommonForgeApi.sendSystemMessage(targetPlayer,"使用 /tpy 接受 使用 /tpn 拒绝",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
-        } else {
-            LZCommonForgeApi.sendSystemMessage(player,"禁止原地tp",LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
+    private static final TpCommand COMMAND_TPA = new TpCommand() {
+        @Override
+        protected boolean requiresCooldownCheck() {
+            return false;
         }
-        return  1;
-    }
+        @Override
+        protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
+            ServerPlayer targetPlayer = EntityArgument.getPlayer(ctx, "target");
+            if(targetPlayer.getUUID() != tpPlayer.player.getUUID()) {
+                tpTools.tpaRequests.add(targetPlayer.getUUID(),tpPlayer.player.getUUID());
+                LZCommonForgeApi.sendSystemMessage(targetPlayer,String.format("！！！ %s 想来你的身边", tpPlayer.player.getName().getString()),LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+                LZCommonForgeApi.sendSystemMessage(targetPlayer,"使用 /tpy 接受 使用 /tpn 拒绝",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+            } else {
+                LZCommonForgeApi.sendSystemMessage(tpPlayer.player,"禁止原地tp",LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
+            }
+            return  1;
+        }
+    };
 
+    private static final TpCommand COMMAND_TPAHERE = new TpCommand() {
+        @Override
+        protected boolean requiresCooldownCheck() {
+            return false;
+        }
+        @Override
+        protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
+            ServerPlayer targetPlayer = EntityArgument.getPlayer(ctx, "target");
+            if(targetPlayer.getUUID() != tpPlayer.player.getUUID()) {
+                tpTools.tpahereRequests.add(targetPlayer.getUUID(),tpPlayer.player.getUUID());
+
+                LZCommonForgeApi.sendSystemMessage(targetPlayer,String.format("！！！ %s 想把你送到他的身边", tpPlayer.player.getName().getString()),LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+                LZCommonForgeApi.sendSystemMessage(targetPlayer,"使用 /tpy 接受 使用 /tpn 拒绝",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+            } else {
+                LZCommonForgeApi.sendSystemMessage(tpPlayer.player,"禁止原地tp",LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
+            }
+            return  1;
+        }
+    };
+
+    private static final TpCommand TPY_TPA = new TpCommand() {
+        @Override
+        protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
+            return 0;
+        }
+    };
+    private static final TpCommand TPY_TPAHERE = new TpCommand() {
+        @Override
+        protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
+            return 0;
+        }
+    };
     private static int cb_tpy(ServerPlayer player,List<ServerPlayer> playerList) {
         // tpa check
         if (tpTools.tpaRequests.pending(player.getUUID())) {

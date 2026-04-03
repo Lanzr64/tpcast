@@ -2,15 +2,18 @@ package net.lanzr.tpCast.api;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 
-public class tpCastStr {
-    final ServerPlayer mPlayer;
-    public tpCastStr(ServerPlayer player) {
-        this.mPlayer = player;
+public class TpCastPlayer {
+    public ServerPlayer player;
+    public tpCastTag tag;
+    public TpCastPlayer(ServerPlayer player) {
+        this.player = player;
+        this.tag = new tpCastTag(player);
     }
+
     public void sendCoolDownInfoMsg(){
-        long gt = LZCommonForgeApi.playerGetLevel(mPlayer).getGameTime();
-        tpCastTag tag = new tpCastTag(mPlayer);
+        long gt = LZCommonForgeApi.playerGetLevel(player).getGameTime();
         StringBuffer str = new StringBuffer();
         int gLv = tag.getCoolDownLevel(gt);
         if(gLv > tag.MaxLevel) {
@@ -30,6 +33,6 @@ public class tpCastStr {
             }
             str.append("]-过载等级: "+gLv);
         }
-        LZCommonForgeApi.sendCenterSystemMessage(mPlayer,str.toString(),ChatFormatting.WHITE);
+        LZCommonForgeApi.sendCenterSystemMessage(player, str.toString(), ChatFormatting.WHITE);
     }
 }
