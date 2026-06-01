@@ -8,17 +8,17 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class tpCastStr {
     ServerPlayer mPlayer;
+
     public tpCastStr(ServerPlayer player) {
         this.mPlayer = player;
     }
+
     private String genCoolDownStr() {
-        boolean circusBreak = false;
         long gt = LZCommonForgeApi.playerGetLevel(mPlayer).getGameTime();
         tpCastTag tag = new tpCastTag(mPlayer);
         StringBuffer str = new StringBuffer();
         int gLv = tag.getCoolDownLevel(gt);
         if(gLv > tag.MaxLevel) {
-            circusBreak = true;
             str.append("XXX[");
             for (int i = 0 ;i < 10;i++){
                 str.append("/");
@@ -36,7 +36,6 @@ public class tpCastStr {
             str.append("]-过载等级: "+gLv);
         }
 
-//        player.sendSystemMessage(Component.literal("gLv is "+ gLv),true);
         return str.toString();
     }
     public boolean sendCoolDownInfoMsg(){

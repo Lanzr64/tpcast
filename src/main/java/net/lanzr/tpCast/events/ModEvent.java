@@ -49,5 +49,6 @@ public class ModEvent {
             TPCommand.register(event);
             TOYCommand.register(event);
             HOMECommand.register(event);
+
         }
 }

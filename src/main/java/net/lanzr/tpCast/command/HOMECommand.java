@@ -38,7 +38,6 @@ public class HOMECommand {
             return -1;
         }
 
-
         BlockPos respawnPos = player.getRespawnPosition();
         ResourceKey<Level> respawnDim = player.getRespawnDimension();
         if(respawnPos == null || respawnDim == null) {
@@ -51,13 +50,6 @@ public class HOMECommand {
             str.sendCoolDownInfoMsg();
             return 1;
         }
-    }
-
-    private static int cb_sethome(ServerPlayer player) {
-        tpCastTag tag = new tpCastTag(player);
-        LZCommonForgeApi.sendSystemMessage(player,"home核心 已就绪",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
-        tag.setHome();
-        return 1;
     }
 
     private static int cb_home(ServerPlayer player) {

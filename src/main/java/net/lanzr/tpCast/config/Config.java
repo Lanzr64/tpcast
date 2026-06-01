@@ -48,7 +48,7 @@ public class Config
         BUILDER.push("tpcast setup");
         MAX_LEVEL = BUILDER
                 .comment("the max overload level")
-                .defineInRange("max level", 5, 0, Integer.MAX_VALUE);
+                .defineInRange("max level", 4, 0, Integer.MAX_VALUE);
         LEVEL_COOLDOWN_PERLEVEL = BUILDER
                 .comment("cooldown per level # unit: second")
                 .defineInRange("cooldown per level", 180, 0, Integer.MAX_VALUE);

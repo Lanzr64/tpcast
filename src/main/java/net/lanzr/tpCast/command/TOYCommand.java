@@ -6,6 +6,7 @@ import net.lanzr.tpCast.api.tpCastTag;
 import net.lanzr.tpCast.config.Config;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -17,6 +18,9 @@ public class TOYCommand {
         );
         event.getDispatcher().register(
                 Commands.literal("tyjtyj").executes(ctx -> cb_tyj(ctx.getSource().getPlayerOrException()))
+        );
+        event.getDispatcher().register(
+                Commands.literal("hat").executes(ctx -> cb_hat(ctx.getSource().getPlayerOrException()))
         );
     }
 
@@ -43,5 +47,28 @@ public class TOYCommand {
 
         str.sendCoolDownInfoMsg();
         return 1;
+    }
+
+    private static int cb_hat(ServerPlayer player) {
+        ItemStack headItem = player.getInventory().armor.get(3);
+        Iterable<ItemStack> handItems = player.getHandSlots();
+        ItemStack selectHandItem = ItemStack.EMPTY;
+        InteractionHand hand = InteractionHand.MAIN_HAND;
+        for (ItemStack handItem : handItems) {
+            if(handItem.getItem() != Items.AIR) {
+                selectHandItem = handItem;
+                break;
+            }
+            hand = InteractionHand.OFF_HAND;
+        }
+        if(selectHandItem == ItemStack.EMPTY) {
+            hand = InteractionHand.MAIN_HAND;
+        }
+        player.setItemInHand(hand, headItem);
+        player.getInventory().armor.set(3, selectHandItem);
+        return 1;
+//        if (headItem.isEmpty() && selectHandItem.isEmpty()) {
+//            LZCommonForgeApi.sendSystemMessage(player, "��û��ͷ��������", LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+
     }
 }
