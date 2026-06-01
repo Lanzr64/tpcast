@@ -16,9 +16,6 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import org.apache.commons.lang3.tuple.Pair;
-
-import java.awt.*;
 
 @EventBusSubscriber(modid = tpCast.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ModEvent {
@@ -26,11 +23,11 @@ public class ModEvent {
 //    public static float levelCostHome = (float)Config.levelCostHome;
 //    public static float levelCostTPA = (float)Config.levelCostTPA;
 //    public static float levelCostSPAWN = (float)Config.levelCostSPAWN;
-    @EventBusSubscriber(modid = tpCast.MODID)
-    public static class RegisterCommands {
-        static public void printSTr(String str) {
-            System.out.println(str);
-        }
+//    @EventBusSubscriber(modid = tpCast.MODID)
+//    public static class RegisterCommands {
+//        static public void printSTr(String str) {
+//            System.out.println(str);
+//        }
 
 //        @SubscribeEvent(priority = EventPriority.HIGHEST)
 //        public static synchronized void onPlayerConnect(PlayerEvent.PlayerLoggedInEvent event) {
@@ -72,7 +69,6 @@ public class ModEvent {
             if(!old_player.getPersistentData().contains(tpCast.MODID))
                 return;
 
-            // 必须有新的数据
             CompoundTag old_Tag = event.getOriginal().getPersistentData().getCompound(tpCast.MODID);
             new_player.getPersistentData().put(tpCast.MODID, old_Tag);
         }
@@ -89,6 +85,6 @@ public class ModEvent {
             CommonCommand.register(event);
 
         }
-    }
+//    }
 
 }
