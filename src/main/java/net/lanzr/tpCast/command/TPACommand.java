@@ -9,12 +9,13 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
-import org.spongepowered.asm.mixin.Mixin;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 import java.util.List;
 
 public class TPACommand {
-    public static void register(net.neoforged.neoforge.event.RegisterCommandsEvent event) {
+    public static void register(RegisterCommandsEvent event) {
+
         event.getDispatcher().register(
                 Commands.literal("tpa")
                     .then(Commands.argument("target", EntityArgument.player())
@@ -87,6 +88,7 @@ public class TPACommand {
                             tPos.getX(),tPos.getY()+1,tPos.getZ(),
                             teleporter.getYRot(),teleporter.getXRot());
                     tag.castOverload((float) Config.levelCostTPA);
+                    LZCommonForgeApi.sendSystemMessage(player,String.format("！！！ %s 接受了tp请求", target.getName().getString()),LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
                     str.sendCoolDownInfoMsg();
                 }
             }

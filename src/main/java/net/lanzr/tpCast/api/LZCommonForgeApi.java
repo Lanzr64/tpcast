@@ -5,7 +5,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.commands.TeleportCommand;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
@@ -39,10 +38,9 @@ public class LZCommonForgeApi {
         return ResourceLocation.parse(name);
     }
 
-    public static int PairParseTeleport(ServerPlayer player, Pair<Vec3,String> cp) {
+    public static void PairParseTeleport(ServerPlayer player, Pair<Vec3,String> cp) {
         ResourceLocation rl = getDimensionResourceLocation(cp.getRight());
         ResourceKey<Level> dim = ResourceKey.create(Registries.DIMENSION,rl);
         player.teleportTo(player.getServer().getLevel(dim), cp.getLeft().x,cp.getLeft().y+1,cp.getLeft().z,player.getYRot(),player.getXRot());
-        return 1;
     }
 }

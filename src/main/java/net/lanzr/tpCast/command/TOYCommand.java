@@ -10,9 +10,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 public class TOYCommand {
-    public static void register(net.neoforged.neoforge.event.RegisterCommandsEvent event) {
+    public static void register(RegisterCommandsEvent event) {
+
         event.getDispatcher().register(
                 Commands.literal("cast-off").executes(ctx -> cb_castOff(ctx.getSource().getPlayerOrException()))
         );

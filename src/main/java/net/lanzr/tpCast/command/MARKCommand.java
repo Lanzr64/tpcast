@@ -15,13 +15,15 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public class MARKCommand {
-    public static void register(net.neoforged.neoforge.event.RegisterCommandsEvent event) {
+    public static void register(RegisterCommandsEvent event) {
+
         final LiteralArgumentBuilder<CommandSourceStack> literalargumentBuilder =
                 Commands.literal("mark")
                         .executes(ctx -> cb_markInfo(ctx.getSource().getPlayerOrException()));

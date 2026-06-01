@@ -16,29 +16,26 @@ import java.util.List;
 import java.util.Set;
 
 public class tpCastTag {
-    private CompoundTag mTag;
-    private ServerPlayer mPlayer;
-    private CompoundTag mMarkList;
+    private final CompoundTag mTag;
+    private final ServerPlayer mPlayer;
+    private final CompoundTag mMarkList;
     final public int CoolDownPiece = Config.levelCoolDownPerLevel * 10; // 10 = 1s
     final public int MaxLevel = Config.maxLevel;
     final public long MaxCoolDown = MaxLevel *CoolDownPiece;
     final private double punishLevel = Config.levelPunishFuseBlow;
-    public String
-            HomePosAlias ="homePos",
-            HomeDimAlias ="homeDim",
-            BackPosAlias ="backPos",
-            BackDimAlias ="backDim",
-            CoolDownStampAlias="stamp";
+    public final String
+            HomePosAlias ="homePos";
+    public final String HomeDimAlias ="homeDim";
+    public final String BackPosAlias ="backPos";
+    public final String BackDimAlias ="backDim";
+    public final String CoolDownStampAlias="stamp";
     public tpCastTag(ServerPlayer player) {
         CompoundTag pTag = player.getPersistentData();
         mTag  = pTag.getCompound(tpCast.MODID);
         mPlayer = player;
-
-        // 不存在
         if(!pTag.contains(tpCast.MODID)) {
             pTag.put(tpCast.MODID,mTag);
         }
-
         // 不存在冷却时间 init
         if(!mTag.contains(CoolDownStampAlias)) {
             mTag.putLong(CoolDownStampAlias,LZCommonForgeApi.playerGetLevel(player).getGameTime());
@@ -50,7 +47,7 @@ public class tpCastTag {
             mTag.put("mark",mMarkList = new CompoundTag());
         }
     }
-    public boolean castOverload(float level) {
+    public void castOverload(float level) {
         boolean ret = true;
         long st = mTag.getLong(CoolDownStampAlias);
         long gt = LZCommonForgeApi.playerGetLevel(mPlayer).getGameTime();
@@ -60,7 +57,6 @@ public class tpCastTag {
             ret = false;
         }
         setCoolDownStamp(st+overLoad);
-        return ret;
     }
 
     public boolean hasKey(String str){
@@ -135,9 +131,6 @@ public class tpCastTag {
     }
     public Set<String> getMarks() {
         Set<String> keys = mMarkList.getAllKeys();
-        for (String key : keys) {
-            System.out.println(key);
-        }
         return keys;
     }
     public Pair<Vec3, String> getMark(String name) {
@@ -151,12 +144,10 @@ public class tpCastTag {
         return Pair.of(vec, dim);
     }
 
-    public int rmMark(String name) {
+    public void rmMark(String name) {
         if(mMarkList.contains(name)) {
             mMarkList.remove(name);
-            return 1;
         }
-        return 0;
 
     }
 

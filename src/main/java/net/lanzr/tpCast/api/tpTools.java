@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 public class tpTools {
     public class tpaRequests {
-        private static HashMap<UUID, UUID> requests = new HashMap<UUID, UUID>();
+        private static final HashMap<UUID, UUID> requests = new HashMap<UUID, UUID>();
         public static void add(UUID target, UUID requester) {
             requests.put(target, requester);
         };
@@ -32,7 +32,7 @@ public class tpTools {
         }
     }
     public class tpahereRequests {
-        private static HashMap<UUID, UUID> requests = new HashMap<UUID, UUID>();
+        private static final HashMap<UUID, UUID> requests = new HashMap<UUID, UUID>();
         public static void add(UUID target, UUID requester) {
             requests.put(target, requester);
         };
@@ -50,17 +50,5 @@ public class tpTools {
             }
             return null;
         }
-    }
-    public static int overloadcheckFunc(ServerPlayer player, Supplier<Integer> func) {
-        tpCastTag tag = new tpCastTag(player);
-        tpCastStr str = new tpCastStr(player);
-        boolean castAble = (tag.getCoolDownLevel(LZCommonForgeApi.playerGetLevel(player).getGameTime()) <= tag.MaxLevel);
-        if(!castAble) {
-            str.sendCoolDownInfoMsg();
-            return -1;
-        }
-        func.get();
-        // 允许使用功能
-        return 1;
     }
 }
