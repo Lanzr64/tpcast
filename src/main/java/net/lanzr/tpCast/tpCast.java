@@ -34,7 +34,7 @@ public class tpCast
                 new IExtensionPoint.DisplayTest(() ->
                         NetworkConstants.IGNORESERVERONLY, (a, b) -> true));
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SPEC,"tpcast-server.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC,"tpcast-common.toml");
     }
 
 //

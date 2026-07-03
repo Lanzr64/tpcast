@@ -36,9 +36,21 @@ public class Config
     private static ForgeConfigSpec.DoubleValue LEVEL_COST_MARK_BASE;
     private static ForgeConfigSpec.DoubleValue LEVEL_COST_MARK_ADD;
     private static ForgeConfigSpec.DoubleValue LEVEL_COST_ASSIST;
+    private static ForgeConfigSpec.DoubleValue LEVEL_COST_REPAIR;
     private static ForgeConfigSpec.DoubleValue LEVEL_ADD_BY_ASSIST;
     private static ForgeConfigSpec.DoubleValue LEVEL_COST_OVERLOAD_TP;
     private static ForgeConfigSpec.DoubleValue INDEX_COST_DISTANT;
+
+    
+    
+    private static ForgeConfigSpec.BooleanValue ENABLE_HOME;
+    private static ForgeConfigSpec.BooleanValue ENABLE_MARK;
+    private static ForgeConfigSpec.BooleanValue ENABLE_TPA;
+    private static ForgeConfigSpec.BooleanValue ENABLE_TOY;
+    private static ForgeConfigSpec.BooleanValue ENABLE_SPAWN;
+    private static ForgeConfigSpec.BooleanValue ENABLE_BACK;
+    private static ForgeConfigSpec.BooleanValue ENABLE_ASSIST;
+    private static ForgeConfigSpec.BooleanValue ENABLE_COMMON;
 
 
 
@@ -54,19 +66,20 @@ public class Config
     public static double levelCostMarkBase;
     public static double levelCostMarkAdd;
     public static double levelCostAssist;
+    public static double levelCostRepair;
     public static double levelAddByAssist;
     public static double levelCostOverloadTP;
     public static double indexCostDistant;
 
+    public static boolean enableHome;
+    public static boolean enableMark;
+    public static boolean enableTPA;
+    public static boolean enableToy;
+    public static boolean enableSpawn;
+    public static boolean enableBack;
+    public static boolean enableAssist;
+    public static boolean enableCommon;
 
-
-    public static String magicNumberIntroduction;
-    public static Set<Item> items;
-
-    private static boolean validateItemName(final Object obj)
-    {
-        return obj instanceof final String itemName && ForgeRegistries.ITEMS.containsKey(new ResourceLocation(itemName));
-    }
 
     private static void setup(ForgeConfigSpec.Builder builder) {
         builder.push("TPCAST COMMON SETUP");
@@ -78,7 +91,7 @@ public class Config
                 .defineInRange("cooldown per level", 180, 0, Integer.MAX_VALUE);
         LEVEL_PUNISH_FUSE_BLOW = builder
                 .comment("Punishment level after fuse blow")
-                .defineInRange("punishment", 2.f, 0.f, 100.f);
+                .defineInRange("punishment", 2.f, 0.f, 10000.f);
         MAX_COST_LIMIT = builder
                 .comment("max cost limit")
                 .defineInRange("max cost limit", 20.f, 0.f, 10000.f);
@@ -86,36 +99,66 @@ public class Config
         builder.push("COST SETUP");
         LEVEL_COST_BACK = builder
                 .comment("back cost level")
-                .defineInRange("back cost", 0.5f, 0.f, 100.f);
+                .defineInRange("back cost", 0.5f, 0.f, 10000.f);
         LEVEL_COST_HOME = builder
                 .comment("home cost level")
-                .defineInRange("home cost", 0.25f, 0.f, 100.f);
+                .defineInRange("home cost", 0.25f, 0.f, 10000.f);
         LEVEL_COST_TPA = builder
                 .comment("tpa cost level")
-                .defineInRange("tpa cost", 1.5f, 0.f, 100.f);
+                .defineInRange("tpa cost", 1.5f, 0.f, 10000.f);
         LEVEL_COST_SPAWN = builder
                 .comment("spawn cost level")
-                .defineInRange("spawn cost", 1.f, 0.f, 100.f);
+                .defineInRange("spawn cost", 1.f, 0.f, 10000.f);
         LEVEL_COST_MARK_BASE = builder
                 .comment("mark base cost level")
-                .defineInRange("mark base cost", 0.8f, 0.f, 100.f);
+                .defineInRange("mark base cost", 0.8f, 0.f, 10000.f);
         LEVEL_COST_MARK_ADD = builder
                 .comment("mark added cost level per mark")
-                .defineInRange("mark add cost", 0.2f, 0.f, 100.f);
+                .defineInRange("mark add cost", 0.2f, 0.f, 10000.f);
 
         LEVEL_COST_ASSIST = builder
                 .comment("assist cost level by user")
-                .defineInRange("assist cost", 2.f, 0.f, 100.f);
+                .defineInRange("assist cost", 2.f, 0.f, 10000.f);
         LEVEL_ADD_BY_ASSIST = builder
                 .comment("assist add level to target")
-                .defineInRange("assist add", 1.4f, 0.f, 100.f);
+                .defineInRange("assist add", 1.4f, 0.f, 10000.f);
+
+        LEVEL_COST_REPAIR = builder
+                .comment("repair cost level")
+                .defineInRange("repair cost", 40f, 0.f, 10000.f);
 
         LEVEL_COST_OVERLOAD_TP = builder
                 .comment("overload tp cost level")
-                .defineInRange("overload tp cost", 6.f, 0.f, 100.f);
+                .defineInRange("overload tp cost", 6.f, 0.f, 10000.f);
         INDEX_COST_DISTANT = builder
                 .comment("distant tp cost index")
-                .defineInRange("distant tp index", 1/200000000.f, 0.f, 100.f);
+                .defineInRange("distant tp index", 1/200000000.f, 0.f, 10000.f);
+        builder.pop();
+        builder.push("COMMAND TOGGLE");
+        ENABLE_HOME = builder
+                .comment("enable /home command")
+                .define("enable home", true);
+        ENABLE_MARK = builder
+                .comment("enable /mark command")
+                .define("enable mark", true);
+        ENABLE_TPA = builder
+                .comment("enable /tpa and /tpahere commands")
+                .define("enable tpa", true);
+        ENABLE_TOY = builder
+                .comment("enable /cast-off /tyjtyj /repair /trashcan commands")
+                .define("enable toy", true);
+        ENABLE_SPAWN = builder
+                .comment("enable /spawn command")
+                .define("enable spawn", true);
+        ENABLE_BACK = builder
+                .comment("enable /back command")
+                .define("enable back", true);
+        ENABLE_ASSIST = builder
+                .comment("enable /cast-assist command")
+                .define("enable assist", true);
+        ENABLE_COMMON = builder
+                .comment("enable /self-check /resetCoolDown /c-tp /suicide commands")
+                .define("enable common", true);
         builder.pop();
     }
 
@@ -137,8 +180,19 @@ public class Config
         levelCostAssist = LEVEL_COST_ASSIST.get();
         levelAddByAssist = LEVEL_ADD_BY_ASSIST.get();
 
+        levelCostRepair = LEVEL_COST_REPAIR.get();
+
         levelCostOverloadTP = LEVEL_COST_OVERLOAD_TP.get();
         indexCostDistant = INDEX_COST_DISTANT.get();
+
+        enableHome = ENABLE_HOME.get();
+        enableMark = ENABLE_MARK.get();
+        enableTPA = ENABLE_TPA.get();
+        enableToy = ENABLE_TOY.get();
+        enableSpawn = ENABLE_SPAWN.get();
+        enableBack = ENABLE_BACK.get();
+        enableAssist = ENABLE_ASSIST.get();
+        enableCommon = ENABLE_COMMON.get();
 
     }
 }

@@ -2,6 +2,7 @@ package net.lanzr.tpCast.events;
 
 import net.lanzr.tpCast.api.tpCastTag;
 import net.lanzr.tpCast.command.*;
+import net.lanzr.tpCast.config.Config;
 import net.lanzr.tpCast.tpCast;
 //import net.minecraft.core.registries.Registries;
 import net.minecraft.commands.Commands;
@@ -75,14 +76,30 @@ public class ModEvent {
 
         @SubscribeEvent
         public static void CommandRegistration(RegisterCommandsEvent event) {
-            MARKCommand.register(event);
-            TPACommand.register(event);
-            TOYCommand.register(event);
-            HOMECommand.register(event);
-            SpawnCommand.register(event);
-            BackCommand.register(event);
-            AssistCommand.register(event);
-            CommonCommand.register(event);
+            if (Config.enableMark) {
+                MARKCommand.register(event);
+            }
+            if (Config.enableTPA) {
+                TPACommand.register(event);
+            }
+            if (Config.enableToy) {
+                TOYCommand.register(event);
+            }
+            if (Config.enableHome) {
+                HOMECommand.register(event);
+            }
+            if (Config.enableSpawn) {
+                SpawnCommand.register(event);
+            }
+            if (Config.enableBack) {
+                BackCommand.register(event);
+            }
+            if (Config.enableAssist) {
+                AssistCommand.register(event);
+            }
+            if (Config.enableCommon) {
+                CommonCommand.register(event);
+            }
 
         }
     }
