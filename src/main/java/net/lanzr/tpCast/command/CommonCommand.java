@@ -11,6 +11,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.coordinates.Vec2Argument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -39,16 +40,7 @@ public class CommonCommand {
                                 .requires(ctx-> ctx.hasPermission(4))
                         ));
         CommandTools.registerWithPrefix(event,
-                Commands.literal("suicide")
-                        .then(Commands.argument("target", EntityArgument.player())
-                                .executes(COMMAND_SUICIDE)
-                        ));
-//         event.getDispatcher().register(
-//                 Commands.literal("overload-tp")
-//                     .then(Commands.argument("location", Vec3Argument.vec3())
-//                     .executes(ctx -> cb_overloadTP(ctx.getSource().getPlayerOrException(),Vec3Argument.getVec3(ctx,"location")))
-//                 )
-//         );
+                Commands.literal("suicide").executes(COMMAND_SUICIDE));
     }
 
     private static final TpCommand COMMAND_SELF_CHECK = new TpCommand() {
@@ -92,17 +84,12 @@ public class CommonCommand {
     private static final TpCommand COMMAND_SUICIDE = new TpCommand() {
         @Override
         protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
+            var player = ctx.getSource().getPlayer();
+            if (player == null) {
+                ctx.getSource().sendFailure(Component.literal("This command can only be used by players."));
+                return 0;
+            }
             tpPlayer.player.kill();
-            return 1;
-        }
-    };
-    private static final TpCommand COMMAND_OVERLOAD_TP = new TpCommand() {
-        @Override
-        protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
-            Vec3 pos = Vec3Argument.getVec3(ctx,"location");
-            tpPlayer.player.teleportTo(pos.x,pos.y,pos.z);
-            tpPlayer.tag.castOverload(7);
-            tpPlayer.sendCoolDownInfoMsg();
             return 1;
         }
     };

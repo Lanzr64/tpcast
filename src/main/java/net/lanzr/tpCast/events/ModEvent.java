@@ -20,22 +20,9 @@ import org.apache.commons.lang3.tuple.Pair;
 
 @Mod.EventBusSubscriber(modid = tpCast.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModEvent {
-//    public static float levelCostBack = (float)Config.levelCostBack;
-//    public static float levelCostHome = (float)Config.levelCostHome;
-//    public static float levelCostTPA = (float)Config.levelCostTPA;
-//    public static float levelCostSPAWN = (float)Config.levelCostSPAWN;
     @Mod.EventBusSubscriber(modid = tpCast.MODID)
     public static class RegisterCommands {
-        static public void printSTr(String str) {
-            System.out.println(str);
-        }
 
-//        @SubscribeEvent(priority = EventPriority.HIGHEST)
-//        public static synchronized void onPlayerConnect(PlayerEvent.PlayerLoggedInEvent event) {
-//            ServerPlayer player = (ServerPlayer) event.getEntity();
-//            tpCastTag tag = new tpCastTag(player);
-////            boolean isPlayer = event.getEntity() instanceof ServerPlayer;
-//        }
 
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static synchronized void onPlayerDeath(LivingDeathEvent event) {
@@ -44,22 +31,6 @@ public class ModEvent {
                 ServerPlayer player  = (ServerPlayer) event.getEntity();
                 tpCastTag tag = new tpCastTag(player);
                 tag.setBack();
-//                printSTr("is player");
-//                BlockPos playerPos = player.getOnPos();
-//                boolean hasHomepos = player.getPersistentData().getIntArray(ExampleMod.MODID + "homepos").length != 0;
-//                printSTr("has flag ?"+hasHomepos);
-//                player.getPersistentData().putIntArray(ExampleMod.MODID + "homepos",
-//                        new int[]{playerPos.getX(), playerPos.getY(), playerPos.getZ()});
-//            boolean isPlayer = event.getEntity() instanceof ServerPlayer;
-//            if(isPlayer) {
-//                ServerPlayer player  = (ServerPlayer) event.getEntity();
-//                BlockPos playerPos = player.getOnPos();
-//                int[] pos = new int[3];
-//                pos[0] = playerPos.getX();
-//                pos[1] = playerPos.getY();
-//                pos[2] = playerPos.getZ();
-//                player.getPersistentData().putIntArray(tpCast.MODID + "homepos", pos);
-//                player.getPersistentData().putString(tpCast.MODID + "homedim", player.level().dimension().location().toString());
             }
         }
         @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -99,6 +70,9 @@ public class ModEvent {
             }
             if (Config.enableCommon) {
                 CommonCommand.register(event);
+            }
+            if (Config.enableOps) {
+                OPCommand.register(event);
             }
 
         }

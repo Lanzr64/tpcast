@@ -11,12 +11,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Set;
 
-// An example config class. This is not required, but it's a good idea to have one to keep your config organized.
-// Demonstrates how to use Forge's config APIs
 @Mod.EventBusSubscriber(modid = tpCast.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config
 {
-//    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec SPEC;
     static {
         ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
@@ -41,8 +38,6 @@ public class Config
     private static ForgeConfigSpec.DoubleValue LEVEL_COST_OVERLOAD_TP;
     private static ForgeConfigSpec.DoubleValue INDEX_COST_DISTANT;
 
-    
-    
     private static ForgeConfigSpec.BooleanValue ENABLE_HOME;
     private static ForgeConfigSpec.BooleanValue ENABLE_MARK;
     private static ForgeConfigSpec.BooleanValue ENABLE_TPA;
@@ -51,8 +46,7 @@ public class Config
     private static ForgeConfigSpec.BooleanValue ENABLE_BACK;
     private static ForgeConfigSpec.BooleanValue ENABLE_ASSIST;
     private static ForgeConfigSpec.BooleanValue ENABLE_COMMON;
-
-
+    private static ForgeConfigSpec.BooleanValue ENABLE_OPS;
 
     public static int maxLevel;
     public static int levelCoolDownPerLevel;
@@ -79,22 +73,23 @@ public class Config
     public static boolean enableBack;
     public static boolean enableAssist;
     public static boolean enableCommon;
+    public static boolean enableOps;
 
 
     private static void setup(ForgeConfigSpec.Builder builder) {
         builder.push("TPCAST COMMON SETUP");
         MAX_LEVEL = builder
                 .comment("the max overload level")
-                .defineInRange("max level", 3, 0, Integer.MAX_VALUE);
+                .defineInRange("max level", 5, 0, Integer.MAX_VALUE);
         LEVEL_COOLDOWN_PERLEVEL = builder
                 .comment("cooldown per level # unit: second")
-                .defineInRange("cooldown per level", 180, 0, Integer.MAX_VALUE);
+                .defineInRange("cooldown per level", 240, 0, Integer.MAX_VALUE);
         LEVEL_PUNISH_FUSE_BLOW = builder
                 .comment("Punishment level after fuse blow")
                 .defineInRange("punishment", 2.f, 0.f, 10000.f);
         MAX_COST_LIMIT = builder
                 .comment("max cost limit")
-                .defineInRange("max cost limit", 20.f, 0.f, 10000.f);
+                .defineInRange("max cost limit", 100.f, 0.f, 10000.f);
         builder.pop();
         builder.push("COST SETUP");
         LEVEL_COST_BACK = builder
@@ -125,14 +120,15 @@ public class Config
 
         LEVEL_COST_REPAIR = builder
                 .comment("repair cost level")
-                .defineInRange("repair cost", 40f, 0.f, 10000.f);
+                .defineInRange("repair cost", 30f, 0.f, 10000.f);
 
         LEVEL_COST_OVERLOAD_TP = builder
                 .comment("overload tp cost level")
-                .defineInRange("overload tp cost", 6.f, 0.f, 10000.f);
+                .defineInRange("overload tp cost", 0.5f, 0.f, 10000.f);
         INDEX_COST_DISTANT = builder
                 .comment("distant tp cost index")
-                .defineInRange("distant tp index", 1/200000000.f, 0.f, 10000.f);
+                .defineInRange("distant tp index", 1f, 0.f, 10000.f);
+
         builder.pop();
         builder.push("COMMAND TOGGLE");
         ENABLE_HOME = builder
@@ -159,6 +155,9 @@ public class Config
         ENABLE_COMMON = builder
                 .comment("enable /self-check /resetCoolDown /c-tp /suicide commands")
                 .define("enable common", true);
+        ENABLE_OPS = builder
+                .comment("enable /overload-tp  commands")
+                .define("enable ops", false);
         builder.pop();
     }
 
@@ -193,6 +192,7 @@ public class Config
         enableBack = ENABLE_BACK.get();
         enableAssist = ENABLE_ASSIST.get();
         enableCommon = ENABLE_COMMON.get();
+        enableOps = ENABLE_OPS.get();
 
     }
 }
