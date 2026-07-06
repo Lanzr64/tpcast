@@ -10,6 +10,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -56,6 +57,35 @@ public class TOYCommand {
             player.drop(tItem, false);
 
             tpPlayer.sendCoolDownInfoMsg();
+            return 1;
+        }
+    };
+
+    private static final TpCommand COMMAND_HAT = new TpCommand() {
+        @Override
+        protected boolean requiresCooldownCheck() {
+            return false;
+        }
+
+        @Override
+        protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
+            ServerPlayer player = tpPlayer.player;
+            ItemStack headItem = player.getInventory().armor.get(3);
+            Iterable<ItemStack> handItems = player.getHandSlots();
+            ItemStack selectHandItem = ItemStack.EMPTY;
+            InteractionHand hand = InteractionHand.MAIN_HAND;
+            for (ItemStack handItem : handItems) {
+                if(handItem.getItem() != Items.AIR) {
+                    selectHandItem = handItem;
+                    break;
+                }
+                hand = InteractionHand.OFF_HAND;
+            }
+            if(selectHandItem == ItemStack.EMPTY) {
+                hand = InteractionHand.MAIN_HAND;
+            }
+            player.setItemInHand(hand, headItem);
+            player.getInventory().armor.set(3, selectHandItem);
             return 1;
         }
     };
