@@ -136,6 +136,7 @@ public class TPACommand {
     }
 
     private static int cb_tpn(ServerPlayer player, List<ServerPlayer> playerList) {
+        // 检查TPA请求
         if (tpTools.tpaRequests.pending(player.getUUID())) {
             for (int i = 0; i < playerList.size(); ++i) {
                 if (playerList.get(i).getUUID().equals(tpTools.tpaRequests.fromWho(player.getUUID()))) {
@@ -143,7 +144,18 @@ public class TPACommand {
                 }
             }
             tpTools.tpaRequests.remove(player.getUUID());
-        } else {
+        }
+        // 检查TPA Here请求
+        else if (tpTools.tpahereRequests.pending(player.getUUID())) {
+            for (int i = 0; i < playerList.size(); ++i) {
+                if (playerList.get(i).getUUID().equals(tpTools.tpahereRequests.fromWho(player.getUUID()))) {
+                    LZCommonForgeApi.sendSystemMessage(playerList.get(i), String.format("%s 拒绝了你的tpahere请求", player.getName().getString()), LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+                }
+            }
+            tpTools.tpahereRequests.remove(player.getUUID());
+        }
+        // 没有待处理的请求
+        else {
             LZCommonForgeApi.sendSystemMessage(player, "看起来没有tp请求", LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
         }
         return 1;

@@ -27,6 +27,8 @@ public class TOYCommand {
                 Commands.literal("repair").executes(COMMAND_REPAIR));
         CommandTools.registerWithPrefix(event,
                 Commands.literal("trashcan").executes(COMMAND_TRASHCAN));
+        CommandTools.registerWithPrefix(event,
+                Commands.literal("hat").executes(COMMAND_HAT));
     }
     
     // 掉落身上所有物品

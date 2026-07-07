@@ -22,6 +22,8 @@ public class tpCastTag {
     public final String HomeDimAlias = "homeDim";
     public final String BackPosAlias = "backPos";
     public final String BackDimAlias = "backDim";
+    public final String BeaconPosAlias = "beaconPos";
+    public final String BeaconDimAlias = "beaconDim";
     public final String CoolDownStampAlias = "stamp";
 
     public tpCastTag(ServerPlayer player) {
@@ -48,7 +50,7 @@ public class tpCastTag {
         long st = mTag.getLong(CoolDownStampAlias);
         long now = System.currentTimeMillis();
         long overLoad = (long) (CoolDownPiece * level);
-        if (st - now > MaxCoolDown - overLoad) {
+        if ((st - now > MaxCoolDown - overLoad) && level >= 0) {
             overLoad += (long) (CoolDownPiece * punishLevel);
             ret = false;
         }
@@ -148,6 +150,16 @@ public class tpCastTag {
 
     public Pair<Vec3, String> getBack() {
         return getPosition(BackPosAlias, BackDimAlias);
+    }
+
+    // ----------- beacon -----------
+
+    public void setBeacon() {
+        setCurrentPosition(BeaconPosAlias, BeaconDimAlias);
+    }
+
+    public Pair<Vec3, String> getBeacon() {
+        return getPosition(BeaconPosAlias, BeaconDimAlias);
     }
 
     // ----------- mark -----------

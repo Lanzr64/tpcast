@@ -65,6 +65,9 @@ public class ModEvent {
             if (Config.enableBack) {
                 BackCommand.register(event);
             }
+            if (Config.enableBackSafe) {
+                BackSafeCommand.register(event);
+            }
             if (Config.enableAssist) {
                 AssistCommand.register(event);
             }
@@ -73,6 +76,9 @@ public class ModEvent {
             }
             if (Config.enableOps) {
                 OPCommand.register(event);
+            }
+            if (Config.enableBeacon) {
+                BeaconCommand.register(event);
             }
 
         }

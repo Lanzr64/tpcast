@@ -32,6 +32,7 @@ public class OPCommand {
                 LZCommonForgeApi.sendSystemMessage(tpPlayer.player,"距离太远，过载值将会超过100无法使用!",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
                 return 1;
             } else {
+                tpPlayer.player.teleportTo(tpPlayer.player.serverLevel(), pos.x, pos.y, pos.z, tpPlayer.player.getYRot(), tpPlayer.player.getXRot());
                 tpPlayer.tag.castOverload(cost);
                 tpPlayer.sendCoolDownInfoMsg();
                 return 1;

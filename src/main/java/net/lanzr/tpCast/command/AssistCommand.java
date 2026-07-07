@@ -6,6 +6,7 @@ import net.lanzr.tpCast.api.LZCommonForgeApi;
 import net.lanzr.tpCast.api.TpCastPlayer;
 import net.lanzr.tpCast.api.tpCastTag;
 import net.lanzr.tpCast.command.tools.CommandTools;
+import net.lanzr.tpCast.config.Config;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -27,13 +28,13 @@ public class AssistCommand {
         protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
             ServerPlayer targetPlayer = EntityArgument.getPlayer(ctx, "target");
             if(targetPlayer.getUUID() != tpPlayer.player.getUUID()) {
-                tpPlayer.tag.castOverload((float) 2);
+                tpPlayer.tag.castOverload((float) Config.levelCostAssist);
 
                 tpCastTag targetTag = new tpCastTag(targetPlayer);
                 TpCastPlayer targetPlayerWrapper = new TpCastPlayer(targetPlayer);
 
-                targetTag.castOverload((float) -1.4);
-                LZCommonForgeApi.sendSystemMessage(tpPlayer.player, String.format("%s 对你的祈福生效了！ ", targetPlayer.getName().getString()), LZCommonForgeApi.MsgTypes.OTHER.getmFmt());
+                targetTag.castOverload((float) -Config.levelAddByAssist);
+                LZCommonForgeApi.sendSystemMessage(targetPlayer, String.format("%s 对你的祈福生效了！ ", tpPlayer.player.getName().getString()), LZCommonForgeApi.MsgTypes.OTHER.getmFmt());
 
                 tpPlayer.sendCoolDownInfoMsg();
                 targetPlayerWrapper.sendCoolDownInfoMsg();

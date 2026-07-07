@@ -37,6 +37,8 @@ public class Config
     private static ForgeConfigSpec.DoubleValue LEVEL_ADD_BY_ASSIST;
     private static ForgeConfigSpec.DoubleValue LEVEL_COST_OVERLOAD_TP;
     private static ForgeConfigSpec.DoubleValue INDEX_COST_DISTANT;
+    private static ForgeConfigSpec.DoubleValue LEVEL_COST_BEACON;
+    private static ForgeConfigSpec.DoubleValue LEVEL_COST_BEACON_GO;
 
     private static ForgeConfigSpec.BooleanValue ENABLE_HOME;
     private static ForgeConfigSpec.BooleanValue ENABLE_MARK;
@@ -44,9 +46,11 @@ public class Config
     private static ForgeConfigSpec.BooleanValue ENABLE_TOY;
     private static ForgeConfigSpec.BooleanValue ENABLE_SPAWN;
     private static ForgeConfigSpec.BooleanValue ENABLE_BACK;
+    private static ForgeConfigSpec.BooleanValue ENABLE_BACK_SAFE;
     private static ForgeConfigSpec.BooleanValue ENABLE_ASSIST;
     private static ForgeConfigSpec.BooleanValue ENABLE_COMMON;
     private static ForgeConfigSpec.BooleanValue ENABLE_OPS;
+    private static ForgeConfigSpec.BooleanValue ENABLE_BEACON;
 
     public static int maxLevel;
     public static int levelCoolDownPerLevel;
@@ -64,6 +68,8 @@ public class Config
     public static double levelAddByAssist;
     public static double levelCostOverloadTP;
     public static double indexCostDistant;
+    public static double levelCostBeacon;
+    public static double levelCostBeaconGo;
 
     public static boolean enableHome;
     public static boolean enableMark;
@@ -71,9 +77,11 @@ public class Config
     public static boolean enableToy;
     public static boolean enableSpawn;
     public static boolean enableBack;
+    public static boolean enableBackSafe;
     public static boolean enableAssist;
     public static boolean enableCommon;
     public static boolean enableOps;
+    public static boolean enableBeacon;
 
 
     private static void setup(ForgeConfigSpec.Builder builder) {
@@ -129,6 +137,13 @@ public class Config
                 .comment("distant tp cost index")
                 .defineInRange("distant tp index", 1f, 0.f, 10000.f);
 
+        LEVEL_COST_BEACON = builder
+                .comment("beacon place cost level")
+                .defineInRange("beacon cost", 0.8f, 0.f, 10000.f);
+        LEVEL_COST_BEACON_GO = builder
+                .comment("beacon go teleport cost level")
+                .defineInRange("beacon go cost", 0.5f, 0.f, 10000.f);
+
         builder.pop();
         builder.push("COMMAND TOGGLE");
         ENABLE_HOME = builder
@@ -149,6 +164,9 @@ public class Config
         ENABLE_BACK = builder
                 .comment("enable /back command")
                 .define("enable back", true);
+        ENABLE_BACK_SAFE = builder
+                .comment("enable /back-safe command (safe teleport back to death point)")
+                .define("enable back safe", true);
         ENABLE_ASSIST = builder
                 .comment("enable /cast-assist command")
                 .define("enable assist", true);
@@ -158,6 +176,9 @@ public class Config
         ENABLE_OPS = builder
                 .comment("enable /overload-tp  commands")
                 .define("enable ops", false);
+        ENABLE_BEACON = builder
+                .comment("enable /beacon command (broadcast a clickable teleport link)")
+                .define("enable beacon", true);
         builder.pop();
     }
 
@@ -183,6 +204,8 @@ public class Config
 
         levelCostOverloadTP = LEVEL_COST_OVERLOAD_TP.get();
         indexCostDistant = INDEX_COST_DISTANT.get();
+        levelCostBeacon = LEVEL_COST_BEACON.get();
+        levelCostBeaconGo = LEVEL_COST_BEACON_GO.get();
 
         enableHome = ENABLE_HOME.get();
         enableMark = ENABLE_MARK.get();
@@ -190,9 +213,11 @@ public class Config
         enableToy = ENABLE_TOY.get();
         enableSpawn = ENABLE_SPAWN.get();
         enableBack = ENABLE_BACK.get();
+        enableBackSafe = ENABLE_BACK_SAFE.get();
         enableAssist = ENABLE_ASSIST.get();
         enableCommon = ENABLE_COMMON.get();
         enableOps = ENABLE_OPS.get();
+        enableBeacon = ENABLE_BEACON.get();
 
     }
 }
