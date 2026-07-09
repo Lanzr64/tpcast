@@ -14,16 +14,14 @@ public class tpCastTag {
     private final CompoundTag mTag;
     private final ServerPlayer mPlayer;
     private final CompoundTag mMarkList;
-    final public long CoolDownPiece = Config.levelCoolDownPerLevel * 1000L; // ms
-    final public int MaxLevel = Config.maxLevel;
+    final public long CoolDownPiece = Config.LEVEL_COOLDOWN_PERLEVEL.get() * 1000L; // ms
+    final public int MaxLevel = Config.MAX_LEVEL.get();
     final public long MaxCoolDown = MaxLevel * CoolDownPiece;
-    final private double punishLevel = Config.levelPunishFuseBlow;
+    final private double punishLevel = Config.LEVEL_PUNISH_FUSE_BLOW.get();
     public final String HomePosAlias = "homePos";
     public final String HomeDimAlias = "homeDim";
     public final String BackPosAlias = "backPos";
     public final String BackDimAlias = "backDim";
-    public final String BeaconPosAlias = "beaconPos";
-    public final String BeaconDimAlias = "beaconDim";
     public final String CoolDownStampAlias = "stamp";
 
     public tpCastTag(ServerPlayer player) {
@@ -150,16 +148,6 @@ public class tpCastTag {
 
     public Pair<Vec3, String> getBack() {
         return getPosition(BackPosAlias, BackDimAlias);
-    }
-
-    // ----------- beacon -----------
-
-    public void setBeacon() {
-        setCurrentPosition(BeaconPosAlias, BeaconDimAlias);
-    }
-
-    public Pair<Vec3, String> getBeacon() {
-        return getPosition(BeaconPosAlias, BeaconDimAlias);
     }
 
     // ----------- mark -----------

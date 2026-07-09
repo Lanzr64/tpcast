@@ -27,7 +27,7 @@ public class BackCommand {
         @Override
         protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
             if (tpPlayer.tag.hasKey(tpPlayer.tag.BackPosAlias)) {
-                tpPlayer.tag.castOverload((float) Config.levelCostBack);
+                tpPlayer.tag.castOverload((Config.LEVEL_COST_BACK.get().floatValue()));
                 Pair<Vec3,String> home = tpPlayer.tag.getBack();
                 ResourceLocation rl = new ResourceLocation(home.getRight());
                 ResourceKey<Level> mydim = ResourceKey.create(Registries.DIMENSION,rl);

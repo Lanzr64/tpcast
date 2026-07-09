@@ -4,9 +4,9 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.lanzr.tpCast.api.BeaconStorage;
 import net.lanzr.tpCast.api.LZCommonForgeApi;
 import net.lanzr.tpCast.api.TpCastPlayer;
-import net.lanzr.tpCast.api.tpCastTag;
 import net.lanzr.tpCast.command.tools.CommandTools;
 import net.lanzr.tpCast.config.Config;
 import net.lanzr.tpCast.tpCast;
@@ -16,8 +16,6 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
@@ -27,26 +25,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 
 public class BeaconCommand {
-
-    // 维度中文名映射，用于广播消息显示
-    private static String dimDisplayName(String dimId) {
-        if (dimId.contains("overworld")) return "主世界";
-        if (dimId.contains("nether")) return "下界";
-        if (dimId.contains("the_end")) return "末地";
-        return dimId;
-    }
 
     public static void register(RegisterCommandsEvent event) {
         CommandTools.registerWithPrefix(event,
@@ -59,18 +46,25 @@ public class BeaconCommand {
                 Commands.literal("debeacon").executes(COMMAND_DEBEACON));
     }
 
+    // 维度中文名映射，用于广播消息显示
+    private static String dimDisplayName(String dimId) {
+        if (dimId.contains("overworld")) return "主世界";
+        if (dimId.contains("nether")) return "下界";
+        if (dimId.contains("the_end")) return "末地";
+        return dimId;
+    }
+
     private static final TpCommand COMMAND_BEACON = new TpCommand() {
         @Override
         protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
             ServerPlayer player = tpPlayer.player;
-            boolean hadOld = tpPlayer.tag.hasKey(tpPlayer.tag.BeaconPosAlias);
+            boolean hadOld = BeaconStorage.hasBeacon(player);
 
-            tpPlayer.tag.setBeacon();
+            BeaconStorage.saveBeacon(player);
 
-            Pair<Vec3, String> beacon = tpPlayer.tag.getBeacon();
+            BlockPos pos = player.getOnPos();
             String playerName = player.getName().getString();
-            String dimName = dimDisplayName(beacon.getRight());
-            BlockPos pos = new BlockPos((int) beacon.getLeft().x, (int) beacon.getLeft().y, (int) beacon.getLeft().z);
+            String dimName = dimDisplayName(player.level().dimension().location().toString());
 
             String tpCommand = "/beacon go " + playerName;
             MutableComponent clickBtn = Component.literal("[ 点击传送 ]")
@@ -92,7 +86,7 @@ public class BeaconCommand {
             message.append(clickBtn);
 
             // 消耗过载
-            tpPlayer.tag.castOverload((float) Config.levelCostBeacon);
+            tpPlayer.tag.castOverload(Config.LEVEL_COST_BEACON.get().floatValue());
 
             // 广播给所有在线玩家
             player.getServer().getPlayerList().broadcastSystemMessage(message, false);
@@ -127,7 +121,7 @@ public class BeaconCommand {
             tpPlayer.player.teleportTo(targetLevel,
                     pos.x + 0.5, pos.y + 1, pos.z + 0.5,
                     tpPlayer.player.getYRot(), tpPlayer.player.getXRot());
-            tpPlayer.tag.castOverload((float) Config.levelCostBeaconGo);
+            tpPlayer.tag.castOverload(Config.LEVEL_COST_BEACON_GO.get().floatValue());
             tpPlayer.sendCoolDownInfoMsg();
             return 1;
         }
@@ -142,11 +136,11 @@ public class BeaconCommand {
 
         @Override
         protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
-            if (!tpPlayer.tag.hasKey(tpPlayer.tag.BeaconPosAlias)) {
+            if (!BeaconStorage.hasBeacon(tpPlayer.player)) {
                 LZCommonForgeApi.sendSystemMessage(tpPlayer.player, "你还没有放置 beacon", LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
                 return -1;
             }
-            tpPlayer.tag.rmKey(tpPlayer.tag.BeaconPosAlias);
+            BeaconStorage.removeBeacon(tpPlayer.player);
             LZCommonForgeApi.sendSystemMessage(tpPlayer.player, "已移除你的 beacon", LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
             return 1;
         }
@@ -154,32 +148,11 @@ public class BeaconCommand {
 
     /**
      * 根据玩家名获取 beacon 位置（支持离线读取）。
-     * 先查在线玩家，不在线则从 playerdata/*.dat 文件读取。
+     * 从永久化存储 world/tpcast_beacons/&lt;uuid&gt;.dat 中读取。
      */
     private static Pair<Vec3, String> resolveOwnerBeacon(net.minecraft.server.MinecraftServer server, String name) {
-        // 1. 在线玩家
-        ServerPlayer owner = server.getPlayerList().getPlayerByName(name);
-        if (owner != null) {
-            tpCastTag tag = new tpCastTag(owner);
-            return tag.hasKey(tag.BeaconPosAlias) ? tag.getBeacon() : null;
-        }
-
-        // 2. 离线玩家：从 NBT 文件读取
         UUID uuid = resolveUuid(server, name);
-        try {
-            Path playerDataPath = server.getWorldPath(LevelResource.PLAYER_DATA_DIR).resolve(uuid + ".dat");
-            if (!playerDataPath.toFile().exists()) return null;
-
-            CompoundTag data = NbtIo.readCompressed(playerDataPath.toFile());
-            CompoundTag tpcastData = data.getCompound(tpCast.MODID);
-            if (!tpcastData.contains("beaconPos") || !tpcastData.contains("beaconDim")) return null;
-
-            int[] pos = tpcastData.getIntArray("beaconPos");
-            String dim = tpcastData.getString("beaconDim");
-            return Pair.of(new Vec3(pos[0], pos[1], pos[2]), dim);
-        } catch (IOException e) {
-            return null;
-        }
+        return BeaconStorage.getBeacon(server, uuid);
     }
 
     /**

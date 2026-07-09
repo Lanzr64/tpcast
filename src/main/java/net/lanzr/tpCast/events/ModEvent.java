@@ -47,40 +47,42 @@ public class ModEvent {
 
         @SubscribeEvent
         public static void CommandRegistration(RegisterCommandsEvent event) {
-            if (Config.enableMark) {
+            if (Config.ENABLE_MARK.get()) {
                 MARKCommand.register(event);
             }
-            if (Config.enableTPA) {
+            if (Config.ENABLE_TPA.get()) {
                 TPACommand.register(event);
             }
-            if (Config.enableToy) {
+            if (Config.ENABLE_TOY.get()) {
                 TOYCommand.register(event);
             }
-            if (Config.enableHome) {
+            if (Config.ENABLE_HOME.get()) {
                 HOMECommand.register(event);
             }
-            if (Config.enableSpawn) {
+            if (Config.ENABLE_SPAWN.get()) {
                 SpawnCommand.register(event);
             }
-            if (Config.enableBack) {
+            if (Config.ENABLE_BACK.get()) {
                 BackCommand.register(event);
             }
-            if (Config.enableBackSafe) {
+            if (Config.ENABLE_BACK_SAFE.get()) {
                 BackSafeCommand.register(event);
             }
-            if (Config.enableAssist) {
+            if (Config.ENABLE_ASSIST.get()) {
                 AssistCommand.register(event);
             }
-            if (Config.enableCommon) {
+            if (Config.ENABLE_COMMON.get()) {
                 CommonCommand.register(event);
             }
-            if (Config.enableOps) {
+            if (Config.ENABLE_OPS.get()) {
                 OPCommand.register(event);
             }
-            if (Config.enableBeacon) {
+            if (Config.ENABLE_BEACON.get()) {
                 BeaconCommand.register(event);
             }
-
+            if (Config.ENABLE_BODY.get()) {
+                BodyCommand.register(event);
+            }
         }
     }
 

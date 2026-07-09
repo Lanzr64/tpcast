@@ -64,7 +64,7 @@ public class BackSafeCommand {
             tpPlayer.player.teleportTo(targetLevel,
                     safePos.getX() + 0.5, safePos.getY() + 1, safePos.getZ() + 0.5,
                     tpPlayer.player.getYRot(), tpPlayer.player.getXRot());
-            tpPlayer.tag.castOverload((float) Config.levelCostBack);
+            tpPlayer.tag.castOverload(Config.LEVEL_COST_BACK.get().floatValue());
             tpPlayer.tag.rmKey(tpPlayer.tag.BackPosAlias);
             tpPlayer.sendCoolDownInfoMsg();
             return 1;

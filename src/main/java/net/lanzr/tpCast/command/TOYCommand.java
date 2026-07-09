@@ -27,8 +27,6 @@ public class TOYCommand {
                 Commands.literal("repair").executes(COMMAND_REPAIR));
         CommandTools.registerWithPrefix(event,
                 Commands.literal("trashcan").executes(COMMAND_TRASHCAN));
-        CommandTools.registerWithPrefix(event,
-                Commands.literal("hat").executes(COMMAND_HAT));
     }
     
     // 掉落身上所有物品
@@ -53,7 +51,7 @@ public class TOYCommand {
         @Override
         protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
             ServerPlayer player = tpPlayer.player;
-            tpPlayer.tag.castOverload((float) Config.levelCostHome);
+            tpPlayer.tag.castOverload(Config.LEVEL_COST_HOME.get().floatValue());
 
             ItemStack tItem = new ItemStack(Items.COOKED_CHICKEN, 1);
             player.drop(tItem, false);
@@ -63,36 +61,8 @@ public class TOYCommand {
         }
     };
 
-    private static final TpCommand COMMAND_HAT = new TpCommand() {
-        @Override
-        protected boolean requiresCooldownCheck() {
-            return false;
-        }
-
-        @Override
-        protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
-            ServerPlayer player = tpPlayer.player;
-            ItemStack headItem = player.getInventory().armor.get(3);
-            Iterable<ItemStack> handItems = player.getHandSlots();
-            ItemStack selectHandItem = ItemStack.EMPTY;
-            InteractionHand hand = InteractionHand.MAIN_HAND;
-            for (ItemStack handItem : handItems) {
-                if(handItem.getItem() != Items.AIR) {
-                    selectHandItem = handItem;
-                    break;
-                }
-                hand = InteractionHand.OFF_HAND;
-            }
-            if(selectHandItem == ItemStack.EMPTY) {
-                hand = InteractionHand.MAIN_HAND;
-            }
-            player.setItemInHand(hand, headItem);
-            player.getInventory().armor.set(3, selectHandItem);
-            return 1;
-        }
-    };
-
     private static final TpCommand COMMAND_REPAIR = new TpCommand() {
+        
         @Override
         protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
             ServerPlayer player = tpPlayer.player;
@@ -114,7 +84,7 @@ public class TOYCommand {
 
             if (repairedCount > 0) {
                 LZCommonForgeApi.sendSystemMessage(player, "已修复 " + repairedCount + " 件物品的耐久！", LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
-                tpPlayer.tag.castOverload((float) Config.levelCostRepair);
+                tpPlayer.tag.castOverload(Config.LEVEL_COST_REPAIR.get().floatValue());
             } else {
                 LZCommonForgeApi.sendSystemMessage(player, "手上没有需要修复的物品。", LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
             }

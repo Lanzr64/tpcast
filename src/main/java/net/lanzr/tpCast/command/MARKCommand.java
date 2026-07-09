@@ -56,7 +56,7 @@ public class MARKCommand {
             Set<String> marks = tpPlayer.tag.getMarks();
             String marksStr = "标记: " + marks.toString();
 
-            double CostLevel = Config.levelCostMarkBase + marks.size() * Config.levelCostMarkAdd;
+            double CostLevel = Config.LEVEL_COST_MARK_BASE.get() + marks.size() * Config.LEVEL_COST_MARK_ADD.get();
             tpPlayer.tag.castOverload((float) CostLevel);
             String costStr = String.format(" 当前消耗:%.2f", CostLevel);
             LZCommonForgeApi.sendSystemMessage(tpPlayer.player, marksStr + costStr, LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
@@ -95,7 +95,7 @@ public class MARKCommand {
                 LZCommonForgeApi.sendSystemMessage(tpPlayer.player, String.format("无法找到标记 %s", name), LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
                 return -1;
             } else {
-                double CostLevel = Config.levelCostMarkBase + tpPlayer.tag.getMarks().size() * Config.levelCostMarkAdd;
+                double CostLevel = Config.LEVEL_COST_MARK_BASE.get() + tpPlayer.tag.getMarks().size() * Config.LEVEL_COST_MARK_ADD.get();
                 tpPlayer.tag.castOverload((float) CostLevel);
 
                 LZCommonForgeApi.PairParseTeleport(tpPlayer.player, mark);

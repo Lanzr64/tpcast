@@ -89,7 +89,7 @@ public class TPACommand {
         }
 
         teleporter.teleportTo(target.serverLevel(), tPos.getX(), tPos.getY() + 1, tPos.getZ(), teleporter.getYRot(), teleporter.getXRot());
-        tpc.tag.castOverload((float) Config.levelCostTPA);
+        tpc.tag.castOverload(Config.LEVEL_COST_TPA.get().floatValue());
         LZCommonForgeApi.sendSystemMessage(player, String.format("！！！ %s 接受了tp请求", target.getName().getString()), LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
         tpc.sendCoolDownInfoMsg();
         return 1;

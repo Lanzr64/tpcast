@@ -27,7 +27,7 @@ public class OPCommand {
         protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
             Vec3 pos = Vec3Argument.getVec3(ctx,"location");
             double distant = tpPlayer.player.distanceToSqr(pos.x,pos.y,pos.z);
-            float cost = (float)(Config.levelCostOverloadTP + distant/1000 * Config.indexCostDistant);
+            float cost = (float)(Config.LEVEL_COST_OVERLOAD_TP.get().floatValue() + distant/1000 * Config.INDEX_COST_DISTANT.get().floatValue());
             if (cost > 100) {
                 LZCommonForgeApi.sendSystemMessage(tpPlayer.player,"距离太远，过载值将会超过100无法使用!",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
                 return 1;

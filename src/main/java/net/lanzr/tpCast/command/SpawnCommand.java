@@ -30,7 +30,7 @@ public class SpawnCommand {
             int y = sl.getSharedSpawnPos().getY();
             int z = sl.getSharedSpawnPos().getZ();
 
-            tpPlayer.tag.castOverload((float) Config.levelCostSPAWN);
+            tpPlayer.tag.castOverload(Config.LEVEL_COST_SPAWN.get().floatValue());
             player.teleportTo(sl, x, y, z, player.getYRot(), player.getXRot());
             tpPlayer.sendCoolDownInfoMsg();
             return 1;

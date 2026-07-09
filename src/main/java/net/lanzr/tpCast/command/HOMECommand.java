@@ -33,7 +33,7 @@ public class HOMECommand {
                 LZCommonForgeApi.sendSystemMessage(tpPlayer.player,"你还没有睡觉呢!",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
                 return -1;
             } else {
-                tpPlayer.tag.castOverload((float) Config.levelCostHome);
+                tpPlayer.tag.castOverload(Config.LEVEL_COST_HOME.get().floatValue());
                 tpPlayer.player.teleportTo(tpPlayer.player.getServer().getLevel(respawnDim),
                         respawnPos.getX(),respawnPos.getY(),respawnPos.getZ(),tpPlayer.player.getYRot(),tpPlayer.player.getXRot());
                 tpPlayer.sendCoolDownInfoMsg();
@@ -51,7 +51,7 @@ public class HOMECommand {
 //            return -1;
 //        }
 //        if (tag.hasKey(tag.HomePosAlias)) {
-//            tag.castOverload((float) Config.levelCostHome);
+//            tag.castOverload(Config.LEVEL_COST_HOME.get().floatValue());
 //            Pair<Vec3,String> home = tag.getHome();
 //            ResourceLocation rl = LZCommonForgeApi.getDimensionResourceLocation(home.getRight());
 //

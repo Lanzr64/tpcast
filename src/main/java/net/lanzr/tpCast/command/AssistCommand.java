@@ -28,12 +28,12 @@ public class AssistCommand {
         protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
             ServerPlayer targetPlayer = EntityArgument.getPlayer(ctx, "target");
             if(targetPlayer.getUUID() != tpPlayer.player.getUUID()) {
-                tpPlayer.tag.castOverload((float) Config.levelCostAssist);
+                tpPlayer.tag.castOverload(Config.LEVEL_COST_ASSIST.get().floatValue());
 
                 tpCastTag targetTag = new tpCastTag(targetPlayer);
                 TpCastPlayer targetPlayerWrapper = new TpCastPlayer(targetPlayer);
 
-                targetTag.castOverload((float) -Config.levelAddByAssist);
+                targetTag.castOverload(-Config.LEVEL_ADD_BY_ASSIST.get().floatValue());
                 LZCommonForgeApi.sendSystemMessage(targetPlayer, String.format("%s 对你的祈福生效了！ ", tpPlayer.player.getName().getString()), LZCommonForgeApi.MsgTypes.OTHER.getmFmt());
 
                 tpPlayer.sendCoolDownInfoMsg();
