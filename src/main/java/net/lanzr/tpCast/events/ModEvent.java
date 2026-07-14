@@ -2,6 +2,7 @@ package net.lanzr.tpCast.events;
 
 import net.lanzr.tpCast.api.tpCastTag;
 import net.lanzr.tpCast.command.*;
+import net.lanzr.tpCast.config.Config;
 import net.lanzr.tpCast.tpCast;
 //import net.minecraft.core.registries.Registries;
 import net.minecraft.commands.Commands;
@@ -19,22 +20,9 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 @EventBusSubscriber(modid = tpCast.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ModEvent {
-//    public static float levelCostBack = (float)Config.levelCostBack;
-//    public static float levelCostHome = (float)Config.levelCostHome;
-//    public static float levelCostTPA = (float)Config.levelCostTPA;
-//    public static float levelCostSPAWN = (float)Config.levelCostSPAWN;
-//    @EventBusSubscriber(modid = tpCast.MODID)
+//    @Mod.EventBusSubscriber(modid = tpCast.MODID)
 //    public static class RegisterCommands {
-//        static public void printSTr(String str) {
-//            System.out.println(str);
-//        }
 
-//        @SubscribeEvent(priority = EventPriority.HIGHEST)
-//        public static synchronized void onPlayerConnect(PlayerEvent.PlayerLoggedInEvent event) {
-//            ServerPlayer player = (ServerPlayer) event.getEntity();
-//            tpCastTag tag = new tpCastTag(player);
-////            boolean isPlayer = event.getEntity() instanceof ServerPlayer;
-//        }
 
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static synchronized void onPlayerDeath(LivingDeathEvent event) {
@@ -43,22 +31,6 @@ public class ModEvent {
                 ServerPlayer player  = (ServerPlayer) event.getEntity();
                 tpCastTag tag = new tpCastTag(player);
                 tag.setBack();
-//                printSTr("is player");
-//                BlockPos playerPos = player.getOnPos();
-//                boolean hasHomepos = player.getPersistentData().getIntArray(ExampleMod.MODID + "homepos").length != 0;
-//                printSTr("has flag ?"+hasHomepos);
-//                player.getPersistentData().putIntArray(ExampleMod.MODID + "homepos",
-//                        new int[]{playerPos.getX(), playerPos.getY(), playerPos.getZ()});
-//            boolean isPlayer = event.getEntity() instanceof ServerPlayer;
-//            if(isPlayer) {
-//                ServerPlayer player  = (ServerPlayer) event.getEntity();
-//                BlockPos playerPos = player.getOnPos();
-//                int[] pos = new int[3];
-//                pos[0] = playerPos.getX();
-//                pos[1] = playerPos.getY();
-//                pos[2] = playerPos.getZ();
-//                player.getPersistentData().putIntArray(tpCast.MODID + "homepos", pos);
-//                player.getPersistentData().putString(tpCast.MODID + "homedim", player.level().dimension().location().toString());
             }
         }
         @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -75,15 +47,42 @@ public class ModEvent {
 
         @SubscribeEvent
         public static void CommandRegistration(RegisterCommandsEvent event) {
-            MARKCommand.register(event);
-            TPACommand.register(event);
-            TOYCommand.register(event);
-            HOMECommand.register(event);
-            SpawnCommand.register(event);
-            BackCommand.register(event);
-            AssistCommand.register(event);
-            CommonCommand.register(event);
-
+            if (Config.ENABLE_MARK.get()) {
+                MARKCommand.register(event);
+            }
+            if (Config.ENABLE_TPA.get()) {
+                TPACommand.register(event);
+            }
+            if (Config.ENABLE_TOY.get()) {
+                TOYCommand.register(event);
+            }
+            if (Config.ENABLE_HOME.get()) {
+                HOMECommand.register(event);
+            }
+            if (Config.ENABLE_SPAWN.get()) {
+                SpawnCommand.register(event);
+            }
+            if (Config.ENABLE_BACK.get()) {
+                BackCommand.register(event);
+            }
+            if (Config.ENABLE_BACK_SAFE.get()) {
+                BackSafeCommand.register(event);
+            }
+            if (Config.ENABLE_ASSIST.get()) {
+                AssistCommand.register(event);
+            }
+            if (Config.ENABLE_COMMON.get()) {
+                CommonCommand.register(event);
+            }
+            if (Config.ENABLE_OPS.get()) {
+                OPCommand.register(event);
+            }
+            if (Config.ENABLE_BEACON.get()) {
+                BeaconCommand.register(event);
+            }
+            if (Config.ENABLE_BODY.get()) {
+                BodyCommand.register(event);
+            }
         }
 //    }
 

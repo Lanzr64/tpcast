@@ -1,10 +1,9 @@
 package net.lanzr.tpCast.command;
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import net.lanzr.tpCast.api.LZCommonForgeApi;
-import net.lanzr.tpCast.api.tpCastStr;
-import net.lanzr.tpCast.api.tpCastTag;
-import net.lanzr.tpCast.config.Config;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.lanzr.tpCast.api.TpCastPlayer;
+import net.lanzr.tpCast.command.tools.CommandTools;import net.lanzr.tpCast.config.Config;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.MinecraftServer;
@@ -16,40 +15,25 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 public class SpawnCommand {
     public static void register(RegisterCommandsEvent event) {
 
-        event.getDispatcher().register(
-                Commands.literal("spawn").executes(ctx -> cb_spawn(ctx.getSource().getPlayerOrException()))
-        );
-        final LiteralArgumentBuilder<CommandSourceStack> literalargumentBuilder =
-                Commands.literal("tyj");
-
-        literalargumentBuilder
-                .then(Commands.literal("spawn").executes(ctx -> cb_spawn(ctx.getSource().getPlayerOrException())));
-
-        event.getDispatcher().register(literalargumentBuilder);
+        CommandTools.registerWithPrefix(event,
+                Commands.literal("spawn").executes(COMMAND_SPAWN));
     }
-    private static int cb_spawn(ServerPlayer player) {
-        tpCastTag tag = new tpCastTag(player);
-        tpCastStr str = new tpCastStr(player);
-        boolean castAble = (tag.getCoolDownLevel(LZCommonForgeApi.playerGetLevel(player).getGameTime()) <= tag.MaxLevel);
-        if(!castAble) {
-            str.sendCoolDownInfoMsg();
-            return -1;
+
+    private static final TpCommand COMMAND_SPAWN = new TpCommand() {
+        @Override
+        protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
+            ServerPlayer player = tpPlayer.player;
+            MinecraftServer server = player.getServer();
+            ServerLevel sl = server.getLevel(Level.OVERWORLD);
+
+            int x = sl.getSharedSpawnPos().getX();
+            int y = sl.getSharedSpawnPos().getY();
+            int z = sl.getSharedSpawnPos().getZ();
+
+            tpPlayer.tag.castOverload(Config.LEVEL_COST_SPAWN.get().floatValue());
+            player.teleportTo(sl, x, y, z, player.getYRot(), player.getXRot());
+            tpPlayer.sendCoolDownInfoMsg();
+            return 1;
         }
-
-        MinecraftServer server = player.getServer();
-        ServerLevel sl = server.getLevel(Level.OVERWORLD);
-//                        ServerLevel sl = server.getLevel(twf);
-
-        int x = sl.getSharedSpawnPos().getX();
-        int y = sl.getSharedSpawnPos().getY();
-        int z = sl.getSharedSpawnPos().getZ();
-
-        tag.castOverload((float) Config.levelCostSPAWN);
-        player.teleportTo( sl,
-                x,y,z,
-                player.getYRot(),player.getXRot());
-        str.sendCoolDownInfoMsg();
-        return 1;
-    }
+    };
 }
-

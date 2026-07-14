@@ -1,11 +1,11 @@
 package net.lanzr.tpCast.command;
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.logging.LogUtils;
 import net.lanzr.tpCast.api.LZCommonForgeApi;
 import net.lanzr.tpCast.api.TpCastPlayer;
-import net.lanzr.tpCast.config.Config;
+import net.lanzr.tpCast.command.tools.CommandTools;import net.lanzr.tpCast.config.Config;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
@@ -15,21 +15,12 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 public class HOMECommand {
 
+//    private static final Logger LOGGER = LogUtils.getLogger();
     public static void register(RegisterCommandsEvent event) {
 
-        event.getDispatcher().register(
-//                Commands.literal("home").executes(ctx -> cb_home(ctx.getSource().getPlayerOrException()))
+        CommandTools.registerWithPrefix(event,
                 Commands.literal("home")
-                        .executes(COMMAND_RETURN_BED)
-        );
-        final LiteralArgumentBuilder<CommandSourceStack> literalargumentBuilder =
-                Commands.literal("tyj");
-
-        literalargumentBuilder
-                .then(Commands.literal("home")
                         .executes(COMMAND_RETURN_BED));
-
-        event.getDispatcher().register(literalargumentBuilder);
     }
 
     private static final TpCommand COMMAND_RETURN_BED = new TpCommand() {
@@ -41,7 +32,7 @@ public class HOMECommand {
                 LZCommonForgeApi.sendSystemMessage(tpPlayer.player,"你还没有睡觉呢!",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
                 return -1;
             } else {
-                tpPlayer.tag.castOverload((float) Config.levelCostHome);
+                tpPlayer.tag.castOverload(Config.LEVEL_COST_HOME.get().floatValue());
                 tpPlayer.player.teleportTo(tpPlayer.player.getServer().getLevel(respawnDim),
                         respawnPos.getX(),respawnPos.getY(),respawnPos.getZ(),tpPlayer.player.getYRot(),tpPlayer.player.getXRot());
                 tpPlayer.sendCoolDownInfoMsg();
@@ -59,7 +50,7 @@ public class HOMECommand {
 //            return -1;
 //        }
 //        if (tag.hasKey(tag.HomePosAlias)) {
-//            tag.castOverload((float) Config.levelCostHome);
+//            tag.castOverload(Config.LEVEL_COST_HOME.get().floatValue());
 //            Pair<Vec3,String> home = tag.getHome();
 //            ResourceLocation rl = LZCommonForgeApi.getDimensionResourceLocation(home.getRight());
 //

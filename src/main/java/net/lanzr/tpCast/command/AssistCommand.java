@@ -4,8 +4,9 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.lanzr.tpCast.api.LZCommonForgeApi;
 import net.lanzr.tpCast.api.TpCastPlayer;
-import net.lanzr.tpCast.api.tpCastStr;
 import net.lanzr.tpCast.api.tpCastTag;
+import net.lanzr.tpCast.command.tools.CommandTools;
+import net.lanzr.tpCast.config.Config;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -15,12 +16,11 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 public class AssistCommand {
     public static void register(RegisterCommandsEvent event) {
 
-        event.getDispatcher().register(
+        CommandTools.registerWithPrefix(event,
                 Commands.literal("cast-assist")
                         .then(Commands.argument("target", EntityArgument.player())
                                 .executes(COMMAND_CAST_ASSIST)
-                        )
-        );
+                        ));
     }
 
     private static final TpCommand COMMAND_CAST_ASSIST = new TpCommand() {
@@ -28,16 +28,16 @@ public class AssistCommand {
         protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
             ServerPlayer targetPlayer = EntityArgument.getPlayer(ctx, "target");
             if(targetPlayer.getUUID() != tpPlayer.player.getUUID()) {
-                tpPlayer.tag.castOverload((float) 2);
+                tpPlayer.tag.castOverload(Config.LEVEL_COST_ASSIST.get().floatValue());
 
                 tpCastTag targetTag = new tpCastTag(targetPlayer);
-                tpCastStr tagetStr = new tpCastStr(targetPlayer);
+                TpCastPlayer targetPlayerWrapper = new TpCastPlayer(targetPlayer);
 
-                targetTag.castOverload((float) -1.4);
-                LZCommonForgeApi.sendSystemMessage(tpPlayer.player, String.format("%s 对你的祈福生效了！ ", targetPlayer.getName().getString()), LZCommonForgeApi.MsgTypes.OTHER.getmFmt());
+                targetTag.castOverload(-Config.LEVEL_ADD_BY_ASSIST.get().floatValue());
+                LZCommonForgeApi.sendSystemMessage(targetPlayer, String.format("%s 对你的祈福生效了！ ", tpPlayer.player.getName().getString()), LZCommonForgeApi.MsgTypes.OTHER.getmFmt());
 
                 tpPlayer.sendCoolDownInfoMsg();
-                tagetStr.sendCoolDownInfoMsg();
+                targetPlayerWrapper.sendCoolDownInfoMsg();
             }
             return 1;
         }

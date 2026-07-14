@@ -11,7 +11,7 @@ public class TpCastPlayer {
     }
 
     public void sendCoolDownInfoMsg(){
-        long gt = LZCommonForgeApi.playerGetLevel(player).getGameTime();
+        long gt = System.currentTimeMillis();
         StringBuffer str = new StringBuffer();
         int gLv = tag.getCoolDownLevel(gt);
         if(gLv > tag.MaxLevel) {
