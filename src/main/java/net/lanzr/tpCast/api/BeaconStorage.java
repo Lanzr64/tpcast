@@ -2,6 +2,7 @@ package net.lanzr.tpCast.api;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,7 +33,7 @@ public class BeaconStorage {
         Path file = getBeaconFile(player.getServer(), uuid);
         try {
             file.getParent().toFile().mkdirs();
-            NbtIo.writeCompressed(tag, file.toFile());
+            NbtIo.writeCompressed(tag, file);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,7 +44,7 @@ public class BeaconStorage {
         if (!file.toFile().exists()) return null;
 
         try {
-            CompoundTag tag = NbtIo.readCompressed(file.toFile());
+            CompoundTag tag = NbtIo.readCompressed(file, NbtAccounter.unlimitedHeap());
             int[] pos = tag.getIntArray("pos");
             String dim = tag.getString("dim");
             return Pair.of(new Vec3(pos[0], pos[1], pos[2]), dim);

@@ -108,7 +108,7 @@ public class BeaconCommand {
                 return -1;
             }
 
-            ResourceLocation rl = new ResourceLocation(beacon.getRight());
+            ResourceLocation rl = ResourceLocation.parse(beacon.getRight());
             ResourceKey<Level> dim = ResourceKey.create(Registries.DIMENSION, rl);
             ServerLevel targetLevel = tpPlayer.player.getServer().getLevel(dim);
 

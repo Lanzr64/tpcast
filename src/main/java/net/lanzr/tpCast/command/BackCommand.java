@@ -29,7 +29,7 @@ public class BackCommand {
             if (tpPlayer.tag.hasKey(tpPlayer.tag.BackPosAlias)) {
                 tpPlayer.tag.castOverload((Config.LEVEL_COST_BACK.get().floatValue()));
                 Pair<Vec3,String> home = tpPlayer.tag.getBack();
-                ResourceLocation rl = new ResourceLocation(home.getRight());
+                ResourceLocation rl = ResourceLocation.parse(home.getRight());
                 ResourceKey<Level> mydim = ResourceKey.create(Registries.DIMENSION,rl);
                 tpPlayer.player.teleportTo(tpPlayer.player.getServer().getLevel(mydim),
                         home.getLeft().x,home.getLeft().y+1,home.getLeft().z,

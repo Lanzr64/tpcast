@@ -28,9 +28,7 @@ public class TOYCommand {
         CommandTools.registerWithPrefix(event,
                 Commands.literal("trashcan").executes(COMMAND_TRASHCAN));
     }
-    
-    // 掉落�?上所有物�?
-    // TODO curios 的饰品之类的现在还不�?�?
+
     private static final TpCommand COMMAND_CAST_OFF = new TpCommand() {
         @Override
         protected boolean requiresCooldownCheck() {
@@ -46,7 +44,6 @@ public class TOYCommand {
         }
     };
 
-    //  吐一�?土窑�?
     private static final TpCommand COMMAND_TYJ = new TpCommand() {
         @Override
         protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
@@ -83,10 +80,10 @@ public class TOYCommand {
             }
 
             if (repairedCount > 0) {
-                LZCommonForgeApi.sendSystemMessage(player, "已修�? " + repairedCount + " 件物品的耐久�?", LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
+                LZCommonForgeApi.sendSystemMessage(player, "已修?? " + repairedCount + " 件物品的耐久??", LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
                 tpPlayer.tag.castOverload(Config.LEVEL_COST_REPAIR.get().floatValue());
             } else {
-                LZCommonForgeApi.sendSystemMessage(player, "手上没有需要修复的物品�?", LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
+                LZCommonForgeApi.sendSystemMessage(player, "手上没有需要修复的物品??", LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
             }
 
             return repairedCount;
@@ -104,7 +101,7 @@ public class TOYCommand {
             ServerPlayer player = tpPlayer.player;
             player.openMenu(new SimpleMenuProvider(
                     (containerId, playerInventory, p) -> new TrashCanMenu(containerId, playerInventory),
-                    Component.literal("垃圾�?")
+                    Component.literal("垃圾??")
             ));
             return 1;
         }

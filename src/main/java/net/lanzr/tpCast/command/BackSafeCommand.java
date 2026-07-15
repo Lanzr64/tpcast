@@ -42,7 +42,7 @@ public class BackSafeCommand {
             }
 
             Pair<Vec3, String> back = tpPlayer.tag.getBack();
-            ResourceLocation rl = new ResourceLocation(back.getRight());
+            ResourceLocation rl = ResourceLocation.parse(back.getRight());
             ResourceKey<Level> dim = ResourceKey.create(Registries.DIMENSION, rl);
             ServerLevel targetLevel = tpPlayer.player.getServer().getLevel(dim);
 
