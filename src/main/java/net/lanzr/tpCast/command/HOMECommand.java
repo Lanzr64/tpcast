@@ -4,12 +4,14 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.logging.LogUtils;
 import net.lanzr.tpCast.api.LZCommonForgeApi;
+import net.lanzr.tpCast.api.SableCompat;
 import net.lanzr.tpCast.api.TpCastPlayer;
 import net.lanzr.tpCast.command.tools.CommandTools;import net.lanzr.tpCast.config.Config;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
@@ -27,6 +29,11 @@ public class HOMECommand {
         @Override
         protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
             BlockPos respawnPos = tpPlayer.player.getRespawnPosition();
+            // Sable compat: convert from real coords to visual coords if respawn is in a sublevel
+            if (SableCompat.isSableLoaded() && respawnPos != null) {
+                respawnPos = SableCompat.getVisualPositionFromSubLevel(
+                        tpPlayer.player.serverLevel(), respawnPos);
+            }
             ResourceKey<Level> respawnDim = tpPlayer.player.getRespawnDimension();
             if(respawnPos == null || respawnDim == null) {
                 LZCommonForgeApi.sendSystemMessage(tpPlayer.player,"你还没有睡觉呢!",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
@@ -34,7 +41,8 @@ public class HOMECommand {
             } else {
                 tpPlayer.tag.castOverload(Config.LEVEL_COST_HOME.get().floatValue());
                 tpPlayer.player.teleportTo(tpPlayer.player.getServer().getLevel(respawnDim),
-                        respawnPos.getX(),respawnPos.getY(),respawnPos.getZ(),tpPlayer.player.getYRot(),tpPlayer.player.getXRot());
+                        respawnPos.getX(),respawnPos.getY(),respawnPos.getZ(),
+                        java.util.Set.of(), tpPlayer.player.getYRot(), tpPlayer.player.getXRot());
                 tpPlayer.sendCoolDownInfoMsg();
                 return 1;
             }

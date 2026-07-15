@@ -41,6 +41,8 @@ public class LZCommonForgeApi {
     public static void PairParseTeleport(ServerPlayer player, Pair<Vec3,String> cp) {
         ResourceLocation rl = getDimensionResourceLocation(cp.getRight());
         ResourceKey<Level> dim = ResourceKey.create(Registries.DIMENSION,rl);
-        player.teleportTo(player.getServer().getLevel(dim), cp.getLeft().x,cp.getLeft().y+1,cp.getLeft().z,player.getYRot(),player.getXRot());
+        player.teleportTo(player.getServer().getLevel(dim),
+                cp.getLeft().x, cp.getLeft().y + 1, cp.getLeft().z,
+                java.util.Set.of(), player.getYRot(), player.getXRot());
     }
 }

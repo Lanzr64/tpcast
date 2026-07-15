@@ -1,5 +1,6 @@
 package net.lanzr.tpCast.api;
 
+import net.lanzr.tpCast.api.SableCompat;
 import net.lanzr.tpCast.config.Config;
 import net.lanzr.tpCast.tpCast;
 import net.minecraft.core.BlockPos;
@@ -90,6 +91,10 @@ public class tpCastTag {
      */
     private void setCurrentPosition(String posKey, String dimKey) {
         BlockPos playerPos = mPlayer.getOnPos();
+        if (SableCompat.isSableLoaded()) {
+            playerPos = SableCompat.getVisualPositionFromSubLevel(
+                    mPlayer.serverLevel(), playerPos);
+        }
         mTag.putIntArray(posKey, new int[]{playerPos.getX(), playerPos.getY(), playerPos.getZ()});
         mTag.putString(dimKey, LZCommonForgeApi.playerGetLevel(mPlayer).dimension().location().toString());
     }
@@ -154,6 +159,10 @@ public class tpCastTag {
 
     public void setMark(String name) {
         BlockPos playerPos = mPlayer.getOnPos();
+        if (SableCompat.isSableLoaded()) {
+            playerPos = SableCompat.getVisualPositionFromSubLevel(
+                    mPlayer.serverLevel(), playerPos);
+        }
         CompoundTag mark;
         if (!mMarkList.contains(name)) {
             mMarkList.put(name, mark = new CompoundTag());
