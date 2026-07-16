@@ -64,6 +64,10 @@ public class CommonCommand {
     };
     private static final TpCommand COMMAND_RESET_COOL_DOWN = new TpCommand() {
         @Override
+        protected boolean requiresCooldownCheck() {
+            return false;
+        }
+        @Override
         protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
             tpPlayer.tag.setCoolDownStamp(System.currentTimeMillis());
             LZCommonForgeApi.sendSystemMessage(tpPlayer.player,String.format("%s SAMA清除了 %s 的过载", tpPlayer.player.getName().getString(),
@@ -73,6 +77,10 @@ public class CommonCommand {
     };
 
     private static final TpCommand COMMAND_CHUNK_TP = new TpCommand() {
+        @Override
+        protected boolean requiresCooldownCheck() {
+            return false;
+        }
         @Override
         protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
             Vec2 pos = Vec2Argument.getVec2(ctx,"location");
