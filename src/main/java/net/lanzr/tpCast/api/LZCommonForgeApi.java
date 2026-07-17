@@ -1,7 +1,6 @@
 package net.lanzr.tpCast.api;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -39,21 +38,12 @@ public class LZCommonForgeApi {
         return ResourceLocation.parse(name);
     }
 
-    /**
-     * Teleport a player to a saved position. Returns true if teleported, false if aborted
-     * due to abnormal coordinates (e.g. unconverted sable sublevel real position).
-     */
-    public static boolean PairParseTeleport(ServerPlayer player, Pair<Vec3,String> cp) {
+    public static void PairParseTeleport(ServerPlayer player, Pair<Vec3,String> cp) {
         ResourceLocation rl = getDimensionResourceLocation(cp.getRight());
         ResourceKey<Level> dim = ResourceKey.create(Registries.DIMENSION,rl);
         Vec3 pos = cp.getLeft();
-        if (SableCompat.isSableLoaded() && SableCompat.isAbnormalCoord(BlockPos.containing(pos))) {
-            sendSystemMessage(player, "目的地已迷失", MsgTypes.ALERT.getmFmt());
-            return false;
-        }
         player.teleportTo(player.getServer().getLevel(dim),
                 pos.x, pos.y + 1, pos.z,
                 java.util.Set.of(), player.getYRot(), player.getXRot());
-        return true;
     }
 }

@@ -11,7 +11,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
@@ -38,14 +37,11 @@ public class HOMECommand {
             if(respawnPos == null || respawnDim == null) {
                 LZCommonForgeApi.sendSystemMessage(tpPlayer.player,"你还没有睡觉呢!",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
                 return -1;
-            } else if (SableCompat.isSableLoaded() && SableCompat.isAbnormalCoord(respawnPos)) {
-                LZCommonForgeApi.sendSystemMessage(tpPlayer.player, "目的地已迷失", LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
-                return -1;
             } else {
-                tpPlayer.tag.castOverload(Config.LEVEL_COST_HOME.get().floatValue());
                 tpPlayer.player.teleportTo(tpPlayer.player.getServer().getLevel(respawnDim),
                         respawnPos.getX(),respawnPos.getY(),respawnPos.getZ(),
                         java.util.Set.of(), tpPlayer.player.getYRot(), tpPlayer.player.getXRot());
+                tpPlayer.tag.castOverload(Config.LEVEL_COST_HOME.get().floatValue());
                 tpPlayer.sendCoolDownInfoMsg();
                 return 1;
             }
