@@ -300,6 +300,16 @@ public class SableCompat {
         return null;
     }
 
+    /**
+     * Checks if a coordinate pair is abnormally large (absolute value > 1,000,000).
+     * Sable's real block coords are typically around ±20,000,000, so this detects
+     * when real→visual conversion has failed and raw real coords leaked through.
+     * Returns {@code true} if the coordinates look like unconverted real coords.
+     */
+    public static boolean isAbnormalCoord(BlockPos pos) {
+        return pos != null && (Math.abs(pos.getX()) > 1000000 || Math.abs(pos.getZ()) > 1000000);
+    }
+
     /** Applies Pose3dc#transformPositionInverse to convert real→visual coords. */
     private static BlockPos transformPositionInverse(Object pose, BlockPos realPos)
             throws Exception {
