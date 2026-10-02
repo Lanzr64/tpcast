@@ -21,6 +21,7 @@ Teleport Cast 是一个面向 Minecraft 1.20.1、基于 Minecraft Forge 的传�
 | --- | --- |
 | `/home` | 返回当前玩家设置的床或重生锚点位置。没有重生位置时无法使用。 |
 | `/spawn` | 传送到主世界的世界重生点。 |
+| `/custp` | 打开 27 格坐标传送界面；也可使用 `/tyj custp`。左侧投入紫水晶碎片决定 X，右侧投入绿宝石决定 Z；每件物品对应 10 格。点击雪球/烈焰弹按钮切换对应坐标的正负，点击中心末影珍珠确认后传送到当前维度的 `(X, 320, Z)`。直接关闭界面会返还投入物品。 |
 | `/back` | 返回最近一次死亡位置；使用后清除该死亡记录。 |
 | `/back-safe` | 在死亡点附近寻找安全站立位置后返回；成功后清除死亡记录。与 `/back` 共用同一条记录。 |
 | `/mark` | 显示个人标记列表及当前标记操作的过载消耗。 |
@@ -112,6 +113,17 @@ Teleport Cast 是一个面向 Minecraft 1.20.1、基于 Minecraft Forge 的传�
 | `enable ops` | `/overload-tp`（默认关闭） |
 | `enable beacon` | `/beacon`、`/debeacon` |
 | `enable body` | `/hat` |
+| `enable custp` | `/custp`、`/tyj custp` |
+
+### 坐标传送
+
+| 配置项 | 默认值 | 说明 |
+| --- | ---: | --- |
+| `CUSTOM TELEPORT.permission level` | `0` | 使用 `/custp` 的最低权限等级；0 表示所有玩家。 |
+| `CUSTOM TELEPORT.overworld only` | `false` | 开启后仅允许在主世界使用。 |
+| `CUSTOM TELEPORT.consume items` | `true` | 成功传送后是否消耗界面中的紫水晶碎片和绿宝石；关闭界面或传送失败都会返还物品。 |
+
+坐标传送在确认后立即执行。目标超出世界边界时不会传送或扣除物品。传送高度固定为 320，建议预先做好着陆准备。
 
 ## 安装
 

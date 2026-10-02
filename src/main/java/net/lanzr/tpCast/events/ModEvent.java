@@ -47,6 +47,9 @@ public class ModEvent {
 
         @SubscribeEvent
         public static void CommandRegistration(RegisterCommandsEvent event) {
+            if (Config.ENABLE_CUSTP.get()) {
+                CustomTeleportCommand.register(event);
+            }
             if (Config.ENABLE_MARK.get()) {
                 MARKCommand.register(event);
             }

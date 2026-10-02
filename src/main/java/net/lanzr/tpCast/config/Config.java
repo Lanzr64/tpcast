@@ -126,7 +126,22 @@ public class Config
     public static final ConfigEntry<ForgeConfigSpec.BooleanValue, Boolean> ENABLE_BODY = new ConfigEntry<>(BUILDER
             .comment("enable /hat /body /leg /boot command (force change armor part)")
             .define("enable body", true));
+    public static final ConfigEntry<ForgeConfigSpec.BooleanValue, Boolean> ENABLE_CUSTP = new ConfigEntry<>(BUILDER
+            .comment("enable /custp and /tyj custp commands")
+            .define("enable custp", true));
 
+    static { BUILDER.pop(); }
+
+    static { BUILDER.push("CUSTOM TELEPORT"); }
+    public static final ConfigEntry<ForgeConfigSpec.IntValue, Integer> CUSTP_PERMISSION_LEVEL = new ConfigEntry<>(BUILDER
+            .comment("minimum permission level for /custp; 0 allows all players")
+            .defineInRange("permission level", 0, 0, 4));
+    public static final ConfigEntry<ForgeConfigSpec.BooleanValue, Boolean> CUSTP_OVERWORLD_ONLY = new ConfigEntry<>(BUILDER
+            .comment("restrict /custp to the overworld")
+            .define("overworld only", false));
+    public static final ConfigEntry<ForgeConfigSpec.BooleanValue, Boolean> CUSTP_CONSUME_ITEMS = new ConfigEntry<>(BUILDER
+            .comment("consume the deposited amethyst and emeralds after a successful teleport")
+            .define("consume items", true));
     static { BUILDER.pop(); }
 
     public static final ForgeConfigSpec SPEC = BUILDER.build();
