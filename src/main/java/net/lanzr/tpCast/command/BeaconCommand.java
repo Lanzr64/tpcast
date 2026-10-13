@@ -54,7 +54,10 @@ public class BeaconCommand {
             ServerPlayer player = tpPlayer.player;
             boolean hadOld = BeaconStorage.hasBeacon(player);
 
-            BeaconStorage.saveBeacon(player);
+            if (!BeaconStorage.saveBeacon(player)) {
+                LZCommonForgeApi.sendSystemMessage(player, "保存 beacon 失败，请查看服务器日志", LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
+                return -1;
+            }
 
             BlockPos pos = player.getOnPos();
             String playerName = player.getName().getString();
@@ -125,7 +128,10 @@ public class BeaconCommand {
                 LZCommonForgeApi.sendSystemMessage(tpPlayer.player, "你还没有放置 beacon", LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
                 return -1;
             }
-            BeaconStorage.removeBeacon(tpPlayer.player);
+            if (!BeaconStorage.removeBeacon(tpPlayer.player)) {
+                LZCommonForgeApi.sendSystemMessage(tpPlayer.player, "移除 beacon 失败，请查看服务器日志", LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
+                return -1;
+            }
             LZCommonForgeApi.sendSystemMessage(tpPlayer.player, "已移除你的 beacon", LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
             return 1;
         }

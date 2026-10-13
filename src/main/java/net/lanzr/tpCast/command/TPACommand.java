@@ -92,7 +92,7 @@ public final class TPACommand {
         ServerPlayer destination = request.direction() == TeleportRequests.Direction.TO_TARGET
                 ? recipient : requester;
         TpCastPlayer caster = new TpCastPlayer(teleporter);
-        if (caster.tag.getCoolDownLevel(System.currentTimeMillis()) > caster.tag.MaxLevel) {
+        if (caster.tag.isFused(System.currentTimeMillis())) {
             LZCommonForgeApi.sendSystemMessage(recipient, "已经过载，无法传送",
                     LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
             caster.sendCoolDownInfoMsg();
@@ -103,8 +103,9 @@ public final class TPACommand {
         TeleportService.teleport(teleporter, destination.serverLevel(),
                 pos.getX(), pos.getY() + 1, pos.getZ());
         caster.tag.castOverload(Config.LEVEL_COST_TPA.get().floatValue());
+        String command = request.direction() == TeleportRequests.Direction.TO_TARGET ? "tp" : "tpahere";
         LZCommonForgeApi.sendSystemMessage(recipient,
-                String.format("！！！ %s 接受了tp请求", destination.getName().getString()),
+                String.format("！！！ 已接受 %s 的%s请求", requester.getName().getString(), command),
                 LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
         caster.sendCoolDownInfoMsg();
         return 1;

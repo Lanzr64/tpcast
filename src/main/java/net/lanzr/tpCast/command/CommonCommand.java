@@ -5,6 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.logging.LogUtils;
 import net.lanzr.tpCast.api.LZCommonForgeApi;
 import net.lanzr.tpCast.api.TpCastPlayer;
+import net.lanzr.tpCast.api.tpCastTag;
 import net.lanzr.tpCast.command.tools.CommandTools;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -52,8 +53,7 @@ public class CommonCommand {
         protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
             tpPlayer.sendCoolDownInfoMsg();
             long gt = System.currentTimeMillis();
-            int gLv = tpPlayer.tag.getCoolDownLevel(gt);
-            if(gLv > tpPlayer.tag.MaxLevel) {
+            if(tpPlayer.tag.isFused(gt)) {
                 long remain = tpPlayer.tag.getCoolDownStamp() - gt - tpPlayer.tag.CoolDownPiece * tpPlayer.tag.MaxLevel;
                 remain = remain < 0 ? 0 : remain / 1000;
                 LZCommonForgeApi.sendSystemMessage(tpPlayer.player,String.format("熔断恢复倒计时 %d:%02d ", remain/60, remain %60),LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
@@ -64,10 +64,16 @@ public class CommonCommand {
     };
     private static final TpCommand COMMAND_RESET_COOL_DOWN = new TpCommand() {
         @Override
+        protected boolean requiresCooldownCheck() {
+            return false;
+        }
+
+        @Override
         protected int execute(CommandContext<CommandSourceStack> ctx, TpCastPlayer tpPlayer) throws CommandSyntaxException {
-            tpPlayer.tag.setCoolDownStamp(System.currentTimeMillis());
+            var target = EntityArgument.getPlayer(ctx, "target");
+            new tpCastTag(target).setCoolDownStamp(System.currentTimeMillis());
             LZCommonForgeApi.sendSystemMessage(tpPlayer.player,String.format("%s SAMA清除了 %s 的过载", tpPlayer.player.getName().getString(),
-                    EntityArgument.getPlayer(ctx,"target").getName().getString()),LZCommonForgeApi.MsgTypes.OTHER.getmFmt());
+                    target.getName().getString()),LZCommonForgeApi.MsgTypes.OTHER.getmFmt());
             return 0;
         }
     };

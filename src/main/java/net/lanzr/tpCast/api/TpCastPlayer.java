@@ -16,7 +16,7 @@ public class TpCastPlayer {
         long gt = System.currentTimeMillis();
         StringBuffer str = new StringBuffer();
         int gLv = tag.getCoolDownLevel(gt);
-        if(gLv > tag.MaxLevel) {
+        if(tag.isFused(gt)) {
             str.append("XXX[");
             for (int i = 0 ;i < tag.MaxLevel;i++){
                 str.append("/");

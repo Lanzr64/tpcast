@@ -45,13 +45,15 @@ public class tpCastTag {
     }
 
     public void castOverload(float level) {
-        boolean ret = true;
-        long st = mTag.getLong(CoolDownStampAlias);
         long now = System.currentTimeMillis();
+        if (CoolDownPiece <= 0) {
+            setCoolDownStamp(now);
+            return;
+        }
+        long st = mTag.getLong(CoolDownStampAlias);
         long overLoad = (long) (CoolDownPiece * level);
         if ((st - now > MaxCoolDown - overLoad) && level >= 0) {
             overLoad += (long) (CoolDownPiece * punishLevel);
-            ret = false;
         }
         setCoolDownStamp(st + overLoad);
     }
@@ -72,14 +74,29 @@ public class tpCastTag {
         return mTag.getLong(CoolDownStampAlias);
     }
 
-    public int getCoolDownLevel(long gt) {
-        long gap = mTag.getLong(CoolDownStampAlias) - gt;
-        int lv = (int) (gap / CoolDownPiece);
-        lv = Math.max(lv, 0);
+    private long remainingCoolDown(long now) {
+        long gap = getCoolDownStamp() - now;
         if (gap < 0) {
-            setCoolDownStamp(gt);
+            setCoolDownStamp(now);
+            return 0;
         }
-        return lv;
+        return gap;
+    }
+
+    public boolean isFused(long now) {
+        if (CoolDownPiece <= 0) {
+            setCoolDownStamp(now);
+            return false;
+        }
+        return remainingCoolDown(now) > MaxCoolDown;
+    }
+
+    public int getCoolDownLevel(long now) {
+        if (CoolDownPiece <= 0) {
+            setCoolDownStamp(now);
+            return 0;
+        }
+        return (int) Math.min(Integer.MAX_VALUE, remainingCoolDown(now) / CoolDownPiece);
     }
 
     // ----------- 通用位置存储方法 -----------

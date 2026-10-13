@@ -20,7 +20,7 @@ public abstract class TpCommand implements Command<CommandSourceStack> {
         TpCastPlayer tpc = new TpCastPlayer(player);
 //        需要检查cd
         if (requiresCooldownCheck()) {
-            boolean castAble = (tpc.tag.getCoolDownLevel(System.currentTimeMillis()) <= tpc.tag.MaxLevel);
+            boolean castAble = !tpc.tag.isFused(System.currentTimeMillis());
             if (!castAble) {
                 // 无法使用，直接发送cd信息并返回 -1
                 tpc.sendCoolDownInfoMsg();

@@ -45,7 +45,7 @@ Teleport Cast 是一个面向 Minecraft 1.20.1、基于 Minecraft Forge 的传�
 | 命令 | 说明 |
 | --- | --- |
 | `/self-check` | 查看当前过载状态；熔断时显示恢复倒计时。 |
-| `/resetCoolDown <玩家>` | 管理员命令，需要 OP 权限等级 4。**当前实现会重置命令执行者的过载，参数玩家只用于提示消息。** |
+| `/resetCoolDown <玩家>` | 管理员命令，需要 OP 权限等级 4。清除指定玩家的过载；管理员自身熔断时仍可执行。 |
 | `/c-tp <区块X> <区块Z>` | 管理员命令，需要 OP 权限等级 4。按区块坐标传送，保留当前高度；输入坐标会乘以 16 转成方块坐标。 |
 | `/cast-assist <玩家>` | 为指定玩家降低过载；施术者会增加过载。 |
 | `/suicide` | 使自己死亡。 |
@@ -78,7 +78,7 @@ Teleport Cast 是一个面向 Minecraft 1.20.1、基于 Minecraft Forge 的传�
 | 配置项 | 默认值 | 说明 |
 | --- | ---: | --- |
 | `max level` | `5` | 熔断前允许累积的最大过载等级。 |
-| `cooldown per level` | `240` 秒 | 每一级过载的恢复时间。 |
+| `cooldown per level` | `240` 秒 | 每一级过载的恢复时间；设为 `0` 时关闭过载累积与熔断。 |
 | `punish ment` | `2` | 熔断时额外增加的过载等级。 |
 | `back cost` | `0.5` | `/back` 和 `/back-safe` 消耗。 |
 | `home cost` | `0.25` | `/home` 与 `/tyjtyj` 消耗。 |
