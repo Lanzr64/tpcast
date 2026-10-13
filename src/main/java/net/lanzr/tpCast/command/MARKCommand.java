@@ -10,7 +10,9 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.lanzr.tpCast.api.LZCommonForgeApi;
 import net.lanzr.tpCast.api.TpCastPlayer;
 import net.lanzr.tpCast.api.tpCastTag;
-import net.lanzr.tpCast.command.tools.CommandTools;import net.lanzr.tpCast.config.Config;
+import net.lanzr.tpCast.command.tools.CommandTools;
+import net.lanzr.tpCast.config.Config;
+import net.lanzr.tpCast.teleport.TeleportService;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.level.ServerPlayer;
@@ -94,15 +96,15 @@ public class MARKCommand {
             if (mark == null) {
                 LZCommonForgeApi.sendSystemMessage(tpPlayer.player, String.format("无法找到标记 %s", name), LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
                 return -1;
-            } else {
-                double CostLevel = Config.LEVEL_COST_MARK_BASE.get() + tpPlayer.tag.getMarks().size() * Config.LEVEL_COST_MARK_ADD.get();
-                tpPlayer.tag.castOverload((float) CostLevel);
-
-                LZCommonForgeApi.PairParseTeleport(tpPlayer.player, mark);
-
-                tpPlayer.sendCoolDownInfoMsg();
-                return 0;
             }
+            if (!TeleportService.teleportSaved(tpPlayer.player, mark, 0, 1, 0)) {
+                LZCommonForgeApi.sendSystemMessage(tpPlayer.player, "无法找到标记所在维度!", LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
+                return -1;
+            }
+            double costLevel = Config.LEVEL_COST_MARK_BASE.get() + tpPlayer.tag.getMarks().size() * Config.LEVEL_COST_MARK_ADD.get();
+            tpPlayer.tag.castOverload((float) costLevel);
+            tpPlayer.sendCoolDownInfoMsg();
+            return 0;
         }
     };
 

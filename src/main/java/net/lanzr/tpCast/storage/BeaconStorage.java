@@ -1,4 +1,4 @@
-package net.lanzr.tpCast.api;
+package net.lanzr.tpCast.storage;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -26,8 +26,7 @@ public class BeaconStorage {
         String dim = player.level().dimension().location().toString();
 
         CompoundTag tag = new CompoundTag();
-        tag.putIntArray("pos", new int[]{pos.getX(), pos.getY(), pos.getZ()});
-        tag.putString("dim", dim);
+        LocationCodec.write(tag, "pos", "dim", pos, dim);
 
         Path file = getBeaconFile(player.getServer(), uuid);
         try {
@@ -44,9 +43,7 @@ public class BeaconStorage {
 
         try {
             CompoundTag tag = NbtIo.readCompressed(file.toFile());
-            int[] pos = tag.getIntArray("pos");
-            String dim = tag.getString("dim");
-            return Pair.of(new Vec3(pos[0], pos[1], pos[2]), dim);
+            return LocationCodec.read(tag, "pos", "dim");
         } catch (IOException e) {
             return null;
         }

@@ -3,7 +3,10 @@ package net.lanzr.tpCast.command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.lanzr.tpCast.api.TpCastPlayer;
-import net.lanzr.tpCast.command.tools.CommandTools;import net.lanzr.tpCast.config.Config;
+import net.lanzr.tpCast.api.LZCommonForgeApi;
+import net.lanzr.tpCast.command.tools.CommandTools;
+import net.lanzr.tpCast.config.Config;
+import net.lanzr.tpCast.teleport.TeleportService;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.MinecraftServer;
@@ -26,12 +29,16 @@ public class SpawnCommand {
             MinecraftServer server = player.getServer();
             ServerLevel sl = server.getLevel(Level.OVERWORLD);
 
+            if (sl == null) {
+                LZCommonForgeApi.sendSystemMessage(player, "无法找到主世界!", LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
+                return -1;
+            }
             int x = sl.getSharedSpawnPos().getX();
             int y = sl.getSharedSpawnPos().getY();
             int z = sl.getSharedSpawnPos().getZ();
 
+            TeleportService.teleport(player, sl, x, y, z);
             tpPlayer.tag.castOverload(Config.LEVEL_COST_SPAWN.get().floatValue());
-            player.teleportTo(sl, x, y, z, player.getYRot(), player.getXRot());
             tpPlayer.sendCoolDownInfoMsg();
             return 1;
         }

@@ -139,3 +139,11 @@ Teleport Cast 是一个面向 Minecraft 1.20.1、基于 Minecraft Forge 的传�
 - 作者：Lanzr
 - Minecraft：1.20.1
 - Forge：47.3.0
+
+## 代码结构
+
+- `command/CommandRegistry` 根据配置注册命令；各命令类只处理参数、反馈和调用业务逻辑。
+- `events/PlayerStateEvents` 处理玩家死亡与重生数据复制。
+- `teleport/` 管理目标维度解析、传送、TPA 请求和安全落点搜索。
+- `storage/` 保存 Beacon，并统一坐标与维度的 NBT 格式，供玩家标记和 Beacon 复用。
+- `config/Config` 定义配置项；读取时直接获取当前配置值。

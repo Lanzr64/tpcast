@@ -4,27 +4,21 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.lanzr.tpCast.api.BeaconStorage;
+import net.lanzr.tpCast.storage.BeaconStorage;
 import net.lanzr.tpCast.api.LZCommonForgeApi;
 import net.lanzr.tpCast.api.TpCastPlayer;
 import net.lanzr.tpCast.command.tools.CommandTools;
 import net.lanzr.tpCast.config.Config;
-import net.lanzr.tpCast.tpCast;
+import net.lanzr.tpCast.teleport.TeleportService;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import org.apache.commons.lang3.tuple.Pair;
@@ -108,19 +102,10 @@ public class BeaconCommand {
                 return -1;
             }
 
-            ResourceLocation rl = new ResourceLocation(beacon.getRight());
-            ResourceKey<Level> dim = ResourceKey.create(Registries.DIMENSION, rl);
-            ServerLevel targetLevel = tpPlayer.player.getServer().getLevel(dim);
-
-            if (targetLevel == null) {
+            if (!TeleportService.teleportSaved(tpPlayer.player, beacon, 0.5, 1, 0.5)) {
                 LZCommonForgeApi.sendSystemMessage(tpPlayer.player, "无法找到 beacon 所在维度!", LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
                 return -1;
             }
-
-            Vec3 pos = beacon.getLeft();
-            tpPlayer.player.teleportTo(targetLevel,
-                    pos.x + 0.5, pos.y + 1, pos.z + 0.5,
-                    tpPlayer.player.getYRot(), tpPlayer.player.getXRot());
             tpPlayer.tag.castOverload(Config.LEVEL_COST_BEACON_GO.get().floatValue());
             tpPlayer.sendCoolDownInfoMsg();
             return 1;

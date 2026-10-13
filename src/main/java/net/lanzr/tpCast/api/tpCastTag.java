@@ -1,6 +1,7 @@
 package net.lanzr.tpCast.api;
 
 import net.lanzr.tpCast.config.Config;
+import net.lanzr.tpCast.storage.LocationCodec;
 import net.lanzr.tpCast.tpCast;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -90,8 +91,8 @@ public class tpCastTag {
      */
     private void setCurrentPosition(String posKey, String dimKey) {
         BlockPos playerPos = mPlayer.getOnPos();
-        mTag.putIntArray(posKey, new int[]{playerPos.getX(), playerPos.getY(), playerPos.getZ()});
-        mTag.putString(dimKey, LZCommonForgeApi.playerGetLevel(mPlayer).dimension().location().toString());
+        LocationCodec.write(mTag, posKey, dimKey, playerPos,
+                mPlayer.serverLevel().dimension().location().toString());
     }
 
     /**
@@ -102,8 +103,8 @@ public class tpCastTag {
      * @param dim 维度
      */
     private void setPosition(String posKey, String dimKey, Vec3 pos, String dim) {
-        mTag.putIntArray(posKey, new int[]{(int) pos.x, (int) pos.y, (int) pos.z});
-        mTag.putString(dimKey, dim);
+        LocationCodec.write(mTag, posKey, dimKey,
+                new BlockPos((int) pos.x, (int) pos.y, (int) pos.z), dim);
     }
 
     /**
@@ -113,13 +114,7 @@ public class tpCastTag {
      * @return 坐标和维度的Pair，如果不存在返回null
      */
     private Pair<Vec3, String> getPosition(String posKey, String dimKey) {
-        if (!mTag.contains(posKey) || !mTag.contains(dimKey)) {
-            return null;
-        }
-        int[] pos = mTag.getIntArray(posKey);
-        Vec3 vec = new Vec3(pos[0], pos[1], pos[2]);
-        String dim = mTag.getString(dimKey);
-        return Pair.of(vec, dim);
+        return LocationCodec.read(mTag, posKey, dimKey);
     }
 
     // ----------- home -----------
@@ -160,8 +155,8 @@ public class tpCastTag {
         } else {
             mark = mMarkList.getCompound(name);
         }
-        mark.putIntArray("pos", new int[]{playerPos.getX(), playerPos.getY(), playerPos.getZ()});
-        mark.putString("dim", LZCommonForgeApi.playerGetLevel(mPlayer).dimension().location().toString());
+        LocationCodec.write(mark, "pos", "dim", playerPos,
+                mPlayer.serverLevel().dimension().location().toString());
     }
 
     public Set<String> getMarks() {
@@ -173,10 +168,7 @@ public class tpCastTag {
         if (!mMarkList.contains(name))
             return null;
         CompoundTag mark = mMarkList.getCompound(name);
-        int[] pos = mark.getIntArray("pos");
-        Vec3 vec = new Vec3(pos[0], pos[1], pos[2]);
-        String dim = mark.getString("dim");
-        return Pair.of(vec, dim);
+        return LocationCodec.read(mark, "pos", "dim");
     }
 
     public void rmMark(String name) {

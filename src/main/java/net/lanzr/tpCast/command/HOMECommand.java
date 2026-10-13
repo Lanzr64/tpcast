@@ -2,21 +2,20 @@ package net.lanzr.tpCast.command;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.logging.LogUtils;
 import net.lanzr.tpCast.api.LZCommonForgeApi;
 import net.lanzr.tpCast.api.TpCastPlayer;
-import net.lanzr.tpCast.command.tools.CommandTools;import net.lanzr.tpCast.config.Config;
+import net.lanzr.tpCast.command.tools.CommandTools;
+import net.lanzr.tpCast.config.Config;
+import net.lanzr.tpCast.teleport.TeleportService;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import org.slf4j.Logger;
 
 public class HOMECommand {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
     public static void register(RegisterCommandsEvent event) {
 
         CommandTools.registerWithPrefix(event,
@@ -33,37 +32,15 @@ public class HOMECommand {
                 LZCommonForgeApi.sendSystemMessage(tpPlayer.player,"你还没有睡觉呢!",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
                 return -1;
             } else {
+                if (!TeleportService.teleport(tpPlayer.player, tpPlayer.player.getServer().getLevel(respawnDim),
+                        respawnPos.getX(), respawnPos.getY(), respawnPos.getZ())) {
+                    LZCommonForgeApi.sendSystemMessage(tpPlayer.player, "无法找到重生点所在维度!", LZCommonForgeApi.MsgTypes.ALERT.getmFmt());
+                    return -1;
+                }
                 tpPlayer.tag.castOverload(Config.LEVEL_COST_HOME.get().floatValue());
-                tpPlayer.player.teleportTo(tpPlayer.player.getServer().getLevel(respawnDim),
-                        respawnPos.getX(),respawnPos.getY(),respawnPos.getZ(),tpPlayer.player.getYRot(),tpPlayer.player.getXRot());
                 tpPlayer.sendCoolDownInfoMsg();
                 return 1;
             }
         }
     };
-//
-//    private static int cb_home(ServerPlayer player) {
-//        tpCastTag tag = new tpCastTag(player);
-//        tpCastStr str = new tpCastStr(player);
-//        boolean castAble = (tag.getCoolDownLevel(LZCommonForgeApi.playerGetLevel(player).getGameTime()) <= tag.MaxLevel);
-//        if(!castAble) {
-//            str.sendCoolDownInfoMsg();
-//            return -1;
-//        }
-//        if (tag.hasKey(tag.HomePosAlias)) {
-//            tag.castOverload(Config.LEVEL_COST_HOME.get().floatValue());
-//            Pair<Vec3,String> home = tag.getHome();
-//            ResourceLocation rl = LZCommonForgeApi.getDimensionResourceLocation(home.getRight());
-//
-//
-//            ResourceKey<Level> mydim = ResourceKey.create(Registries.DIMENSION,rl);
-//            player.teleportTo(player.getServer().getLevel(mydim), home.getLeft().x,home.getLeft().y+1,home.getLeft().z,player.getYRot(),player.getXRot());
-//
-//            str.sendCoolDownInfoMsg();
-//            return 1;
-//        } else {
-//            LZCommonForgeApi.sendSystemMessage(player,"你无家可归!",LZCommonForgeApi.MsgTypes.NORMAL.getmFmt());
-//            return -1;
-//        }
-//    }
 }
