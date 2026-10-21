@@ -17,6 +17,7 @@ public final class CommandRegistry {
 
     @SubscribeEvent
     public static void register(RegisterCommandsEvent event) {
+        registerIfEnabled(event, Config.ENABLE_CUSTP::get, CustomTeleportCommand::register);
         registerIfEnabled(event, Config.ENABLE_MARK::get, MARKCommand::register);
         registerIfEnabled(event, Config.ENABLE_TPA::get, TPACommand::register);
         registerIfEnabled(event, Config.ENABLE_TOY::get, TOYCommand::register);

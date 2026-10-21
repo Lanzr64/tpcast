@@ -4,6 +4,8 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 import net.lanzr.tpCast.config.ConfigApi.ConfigEntry;
 
+import java.util.List;
+
 public class Config
 {
     static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
@@ -109,7 +111,28 @@ public class Config
     public static final ConfigEntry<ForgeConfigSpec.BooleanValue, Boolean> ENABLE_BODY = new ConfigEntry<>(BUILDER
             .comment("enable /hat /body /leg /boot command (force change armor part)")
             .define("enable body", true));
+    public static final ConfigEntry<ForgeConfigSpec.BooleanValue, Boolean> ENABLE_CUSTP = new ConfigEntry<>(BUILDER
+            .comment("enable /custp, /custp help, and their /tyj aliases")
+            .define("enable custp", true));
 
+    static { BUILDER.pop(); }
+
+    static { BUILDER.push("CUSTOM TELEPORT"); }
+    public static final ConfigEntry<ForgeConfigSpec.IntValue, Integer> CUSTP_PERMISSION_LEVEL = new ConfigEntry<>(BUILDER
+            .comment("minimum permission level for /custp; 0 allows all players")
+            .defineInRange("permission level", 0, 0, 4));
+    public static final ConfigEntry<ForgeConfigSpec.BooleanValue, Boolean> CUSTP_OVERWORLD_ONLY = new ConfigEntry<>(BUILDER
+            .comment("restrict /custp to the overworld")
+            .define("overworld only", false));
+    public static final ConfigEntry<ForgeConfigSpec.BooleanValue, Boolean> CUSTP_CONSUME_ITEMS = new ConfigEntry<>(BUILDER
+            .comment("consume deposited coordinate items after a successful teleport")
+            .define("consume items", true));
+    public static final ConfigEntry<ForgeConfigSpec.ConfigValue<List<? extends String>>, List<? extends String>> CUSTP_X_ITEMS = new ConfigEntry<>(BUILDER
+            .comment("X coordinate items: item ID=blocks per item; multiple entries are added together")
+            .defineList("x items", List.of("minecraft:amethyst_shard=10", "minecraft:amethyst_block=100"), entry -> entry instanceof String));
+    public static final ConfigEntry<ForgeConfigSpec.ConfigValue<List<? extends String>>, List<? extends String>> CUSTP_Z_ITEMS = new ConfigEntry<>(BUILDER
+            .comment("Z coordinate items: item ID=blocks per item; multiple entries are added together")
+            .defineList("z items", List.of("minecraft:emerald=10", "minecraft:emerald_block=100"), entry -> entry instanceof String));
     static { BUILDER.pop(); }
 
     public static final ForgeConfigSpec SPEC = BUILDER.build();

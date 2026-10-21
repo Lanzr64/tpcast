@@ -7,7 +7,7 @@ Teleport Cast 是一个面向 Minecraft 1.20.1、基于 Minecraft Forge 的传�
 - Minecraft：1.20.1
 - Minecraft Forge：47.3.0（Forge 47 系列）
 - Java：17
-- 当前模组版本：`1.20.1-forge-0.2.7`
+- 当前模组版本：`1.20.1-forge-0.2.9`
 
 模组功能由服务器提供；服务器需要安装本模组，客户端可以不安装。
 
@@ -21,6 +21,8 @@ Teleport Cast 是一个面向 Minecraft 1.20.1、基于 Minecraft Forge 的传�
 | --- | --- |
 | `/home` | 返回当前玩家设置的床或重生锚点位置。没有重生位置时无法使用。 |
 | `/spawn` | 传送到主世界的世界重生点。 |
+| `/custp` | 打开 27 格坐标传送界面；也可使用 `/tyj custp`。左侧投入配置的 X 物品，右侧投入配置的 Z 物品；不同物品的距离会累加。点击雪球/烈焰弹按钮切换对应坐标的正负，点击中心末影珍珠确认后传送到当前维度的 `(X, 320, Z)`。直接关闭界面会返还投入物品。 |
+| `/custp help` | 向调用玩家列出当前配置中 X、Z 两轴可用的物品 ID 及每件对应的格数；也可使用 `/tyj custp help`。 |
 | `/back` | 返回最近一次死亡位置；使用后清除该死亡记录。 |
 | `/back-safe` | 在死亡点附近寻找安全站立位置后返回；成功后清除死亡记录。与 `/back` 共用同一条记录。 |
 | `/mark` | 显示个人标记列表及当前标记操作的过载消耗。 |
@@ -112,10 +114,36 @@ Teleport Cast 是一个面向 Minecraft 1.20.1、基于 Minecraft Forge 的传�
 | `enable ops` | `/overload-tp`（默认关闭） |
 | `enable beacon` | `/beacon`、`/debeacon` |
 | `enable body` | `/hat` |
+| `enable custp` | `/custp`、`/custp help` 及对应的 `/tyj` 命令 |
+
+### 坐标传送
+
+| 配置项 | 默认值 | 说明 |
+| --- | ---: | --- |
+| `CUSTOM TELEPORT.permission level` | `0` | 使用 `/custp` 的最低权限等级；0 表示所有玩家。 |
+| `CUSTOM TELEPORT.overworld only` | `false` | 开启后仅允许在主世界使用。 |
+| `CUSTOM TELEPORT.consume items` | `true` | 成功传送后是否消耗投入的坐标物品；关闭界面或传送失败都会返还物品。 |
+| `CUSTOM TELEPORT.x items` | 紫水晶碎片 `10`、紫水晶块 `100` | 左侧 X 轴可投入的物品 ID 与每件物品对应的格数。 |
+| `CUSTOM TELEPORT.z items` | 绿宝石 `10`、绿宝石块 `100` | 右侧 Z 轴可投入的物品 ID 与每件物品对应的格数。 |
+
+每条物品规则写成 `物品ID=格数`，格数必须是正整数。两个列表均可增删物品；同一侧放入不同物品时，按“数量 × 对应格数”相加。例如 2 个紫水晶碎片和 1 个紫水晶块会得到 X = 120。物品 ID 可以来自 Minecraft 或已安装的其他模组；无效或重复的规则会被跳过并写入服务器日志。
+
+`config/tpcast-common.toml` 中的默认配置样例：
+
+```toml
+["CUSTOM TELEPORT"]
+"permission level" = 0
+"overworld only" = false
+"consume items" = true
+"x items" = ["minecraft:amethyst_shard=10", "minecraft:amethyst_block=100"]
+"z items" = ["minecraft:emerald=10", "minecraft:emerald_block=100"]
+```
+
+坐标传送在确认后立即执行。目标超出世界边界时不会传送或扣除物品。传送高度固定为 320，建议预先做好着陆准备。
 
 ## 安装
 
-将构建好的 `tpcast-1.20.1-forge-0.2.7.jar` 放入 Forge 1.20.1 服务器的 `mods` 目录，然后启动服务器。`/beacon` 数据保存在当前世界目录下的 `tpcast_beacons/` 文件夹。
+将构建好的 `tpcast-1.20.1-forge-0.2.9.jar` 放入 Forge 1.20.1 服务器的 `mods` 目录，然后启动服务器。`/beacon` 数据保存在当前世界目录下的 `tpcast_beacons/` 文件夹。
 
 ## 从源码构建
 
